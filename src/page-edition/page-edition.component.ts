@@ -12,4 +12,9 @@ export class PageEditionComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // Chargement du component SidebarGauche
+  loadSidebarGauche(test: string) {
+    
+  }
+
 }
