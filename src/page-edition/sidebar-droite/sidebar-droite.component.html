@@ -38,17 +38,16 @@
 </form>
 
 <div class="container align-bottom">
-    <label id="labelsListText">Liste des étiquettes :</label>
-    <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action active">Cras justo odio</a>
-        <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-        <a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
-        <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
-        <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>
-    </div>
+    <label id="labelsSelectText">Liste des étiquettes :</label>
+    <select id="labelsSelect" class="form-select" multiple aria-label="multiple select example">
+        <option selected>Open this select menu</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
 </div>
 
-<button class="btn btn-primary">Sauvegarder</button>
+<button class="btn btn-primary" (click)="saveChanges()">Sauvegarder</button>
 
 
 
