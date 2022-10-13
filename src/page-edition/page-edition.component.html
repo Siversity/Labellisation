@@ -1,14 +1,25 @@
 <!-- Racine -->
+<!-- On crée une DIV ayant pour taille toute la taille de l'écran -->
 <div class="container-fluid text-center min-vh-100 min-vm-100">
 
-    <div class="row min-vh-100 ">
-        <div class="col border">
+    <!-- On crée une ligne -->
+    <div class="row min-vh-100">
+
+        <!-- On crée la colonne de la SidebarGauche -->
+        <div class="col-2 border">
             <app-sidebar-gauche></app-sidebar-gauche>
         </div>
-        <div class="col-8 border">Edition image</div>
-        <div class="col border">
+
+        <!-- On crée la colonne de la zone d'affichage de l'Image -->
+        <div class="col-7 border d-flex align-items-center justify-content-center">
+            <app-image></app-image>
+        </div>
+
+        <!-- On crée la colonne de la SidebarDroite-->
+        <div class="col-3 border">
             <app-sidebar-droite></app-sidebar-droite>
         </div>
+
     </div>
 
 </div>
