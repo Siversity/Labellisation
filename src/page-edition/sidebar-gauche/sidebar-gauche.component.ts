@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './sidebar-gauche.component.html',
   styleUrls: ['./sidebar-gauche.component.css']
 })
+
 export class SidebarGaucheComponent implements OnInit {
 
   constructor() { }
