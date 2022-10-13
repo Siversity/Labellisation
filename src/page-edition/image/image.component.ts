@@ -21,67 +21,9 @@ export class ImageComponent implements OnInit {
     this.canvas = new fabric.Canvas("canvas", {});
     this.canvas.defaultCursor = "Handwriting";
 
-    // Import de l'image dans le canvas
-    fabric.Image.fromURL(this.lienImage, (image) => {
-
-      // Propriétés de l'image
-      image.selectable = false;
-      image.hoverCursor = "pointer"
-
-      // Responsive
-      this.resizeCanvas(image);
-      window.addEventListener('resize', () => { this.resizeCanvas(image) })
-
-      // Affichage de l'image
-      this.canvas.add(image);
-    });
-
-    var rect: fabric.Rect;
-    var isDown: boolean;
-    var origX: number;
-    var origY: number;
-
-    this.canvas.on('mouse:down', (o) => {
-    isDown = true;
-    var pointer = this.canvas.getPointer(o.e);
-    origX = pointer.x;
-    origY = pointer.y;
-    var pointer = this.canvas.getPointer(o.e);
-    rect = new fabric.Rect({
-        left: origX,
-        top: origY,
-        originX: 'left',
-        originY: 'top',
-        width: pointer.x-origX,
-        height: pointer.y-origY,
-        angle: 0,
-        fill: 'rgba(255,0,0,0.5)',
-        transparentCorners: false
-    });
-    this.canvas.add(rect);
-
-    this.canvas.on('mouse:move', (o) => {
-      if (!isDown) return;
-      var pointer = this.canvas.getPointer(o.e);
-  
-      if(origX>pointer.x){
-          rect.set({ left: Math.abs(pointer.x) });
-      }
-      if(origY>pointer.y){
-          rect.set({ top: Math.abs(pointer.y) });
-      }
-  
-      rect.set({ width: Math.abs(origX - pointer.x) });
-      rect.set({ height: Math.abs(origY - pointer.y) });
-  
-  
-      this.canvas.renderAll();
-  });
-  
-  this.canvas.on('mouse:up', (o) => {
-    isDown = false;
-  });
-});
+    // Ajout des fonctionnalités
+    this.importerImage();
+    this.ajouterEtiquette();
 
 
     /*
@@ -105,6 +47,25 @@ export class ImageComponent implements OnInit {
   }
 
 
+  // Fonction d'import des images
+  importerImage(): void {
+    fabric.Image.fromURL(this.lienImage, (image) => {
+
+      // Propriétés de l'image
+      image.selectable = false;
+      image.hoverCursor = "pointer"
+
+      // Responsive
+      this.resizeCanvas(image);
+      window.addEventListener('resize', () => { this.resizeCanvas(image) })
+
+      // Affichage de l'image
+      this.canvas.add(image);
+    });
+  }
+
+
+  // Fonction pour afficher l'image de manière responsive
   resizeCanvas(image: fabric.Image): void {
     console.log("Resizing")
     // Mise à jour des dimensions du canvas en fonction de la taille de l'image
@@ -142,7 +103,56 @@ export class ImageComponent implements OnInit {
         this.canvas.setWidth(image.getScaledWidth() as number)
       }
     }
+  }
 
+
+  // Fonction d'ajout des étiquettes
+  ajouterEtiquette() {
+    var rect: fabric.Rect;
+    var isDown: boolean;
+    var origX: number;
+    var origY: number;
+
+    this.canvas.on('mouse:down', (o) => {
+      isDown = true;
+      var pointer = this.canvas.getPointer(o.e);
+      origX = pointer.x;
+      origY = pointer.y;
+      var pointer = this.canvas.getPointer(o.e);
+      rect = new fabric.Rect({
+        left: origX,
+        top: origY,
+        originX: 'left',
+        originY: 'top',
+        width: pointer.x - origX,
+        height: pointer.y - origY,
+        angle: 0,
+        fill: 'rgba(255,0,0,0.5)',
+        transparentCorners: false
+      });
+      this.canvas.add(rect);
+
+      this.canvas.on('mouse:move', (o) => {
+        if (!isDown) return;
+        var pointer = this.canvas.getPointer(o.e);
+
+        if (origX > pointer.x) {
+          rect.set({ left: Math.abs(pointer.x) });
+        }
+        if (origY > pointer.y) {
+          rect.set({ top: Math.abs(pointer.y) });
+        }
+
+        rect.set({ width: Math.abs(origX - pointer.x) });
+        rect.set({ height: Math.abs(origY - pointer.y) });
+
+        this.canvas.renderAll();
+      });
+
+      this.canvas.on('mouse:up', (o) => {
+        isDown = false;
+      });
+    });
   }
 
 }
