@@ -5,7 +5,7 @@ import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.componen
 
 const routes: Routes = [
   { path : 'sidebarGauche', component: SidebarGaucheComponent },
-  { path : 'sidebarGauche', component: SidebarDroiteComponent },
+  { path : 'sidebarDroite', component: SidebarDroiteComponent },
 ];
 
 @NgModule({
