@@ -1,0 +1,23 @@
+.row {
+    padding: 1%;
+}
+
+.list-group-item {
+    text-align: left;
+}
+
+.list-group {
+    max-height: 1%;
+    /* max-width: 75%; */
+    overflow: scroll;
+    padding-bottom: 2%;
+}
+
+#labelsListText {
+    text-align: left;
+    padding-bottom: 2%;
+}
+
+.container {
+    padding-bottom: 2%;
+}
