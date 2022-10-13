@@ -5,7 +5,6 @@ import { PageEditionRoutingModule } from './page-edition-routing.module';
 import { PageEditionComponent } from './page-edition.component';
 import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.component';
 import { SidebarGaucheComponent } from './sidebar-gauche/sidebar-gauche.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ImageComponent } from './image/image.component';
 
 @NgModule({
@@ -17,8 +16,7 @@ import { ImageComponent } from './image/image.component';
   ],
   imports: [
     BrowserModule,
-    PageEditionRoutingModule,
-    BrowserAnimationsModule
+    PageEditionRoutingModule
   ],
   providers: [],
   bootstrap: [PageEditionComponent]
