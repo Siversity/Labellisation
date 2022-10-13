@@ -18,21 +18,70 @@ export class ImageComponent implements OnInit {
   ngOnInit(): void {
 
     // Création d'un canvas vide
-    this.canvas = new fabric.Canvas("canvas", {})
+    this.canvas = new fabric.Canvas("canvas", {});
+    this.canvas.defaultCursor = "Handwriting";
 
     // Import de l'image dans le canvas
     fabric.Image.fromURL(this.lienImage, (image) => {
 
-      // Image non déplaçable
+      // Propriétés de l'image
       image.selectable = false;
-
-      this.resizeCanvas(image);
+      image.hoverCursor = "pointer"
 
       // Responsive
+      this.resizeCanvas(image);
       window.addEventListener('resize', () => { this.resizeCanvas(image) })
 
+      // Affichage de l'image
       this.canvas.add(image);
     });
+
+    var rect: fabric.Rect;
+    var isDown: boolean;
+    var origX: number;
+    var origY: number;
+
+    this.canvas.on('mouse:down', (o) => {
+    isDown = true;
+    var pointer = this.canvas.getPointer(o.e);
+    origX = pointer.x;
+    origY = pointer.y;
+    var pointer = this.canvas.getPointer(o.e);
+    rect = new fabric.Rect({
+        left: origX,
+        top: origY,
+        originX: 'left',
+        originY: 'top',
+        width: pointer.x-origX,
+        height: pointer.y-origY,
+        angle: 0,
+        fill: 'rgba(255,0,0,0.5)',
+        transparentCorners: false
+    });
+    this.canvas.add(rect);
+
+    this.canvas.on('mouse:move', (o) => {
+      if (!isDown) return;
+      var pointer = this.canvas.getPointer(o.e);
+  
+      if(origX>pointer.x){
+          rect.set({ left: Math.abs(pointer.x) });
+      }
+      if(origY>pointer.y){
+          rect.set({ top: Math.abs(pointer.y) });
+      }
+  
+      rect.set({ width: Math.abs(origX - pointer.x) });
+      rect.set({ height: Math.abs(origY - pointer.y) });
+  
+  
+      this.canvas.renderAll();
+  });
+  
+  this.canvas.on('mouse:up', (o) => {
+    isDown = false;
+  });
+});
 
 
     /*
