@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarGaucheComponent } from './sidebar-gauche/sidebar-gauche.component';
 import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.component';
+import { NgxImageZoomModule } from 'ngx-image-zoom';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,9 @@ import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.componen
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgxImageZoomModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

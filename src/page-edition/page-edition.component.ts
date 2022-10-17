@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageEditionComponent implements OnInit {
 
+  img : any = "../assets/images/Capture.PNG";
+  zoom:boolean=false;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -15,6 +18,22 @@ export class PageEditionComponent implements OnInit {
   // Chargement du component SidebarGauche
   loadSidebarGauche(test: string) {
     
+  }
+  
+  zoomOut(){
+    this.zoom=false;
+  }
+  zoomIn(){
+    
+    this.zoom=true;
+  }
+  getheight(){
+    if(this.zoom==true){
+      return '500px';
+    }
+    else{
+      return '200px';
+      }
   }
 
 }

@@ -7,6 +7,7 @@ import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.componen
 import { SidebarGaucheComponent } from './sidebar-gauche/sidebar-gauche.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ImageComponent } from './image/image.component';
+import { NgxImageZoomModule } from 'ngx-image-zoom';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ImageComponent } from './image/image.component';
   imports: [
     BrowserModule,
     PageEditionRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxImageZoomModule
   ],
   providers: [],
   bootstrap: [PageEditionComponent]
