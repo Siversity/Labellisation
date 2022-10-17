@@ -12,9 +12,15 @@ export class ImageComponent implements OnInit {
   // Variables
   lienImage: string = 'assets/images/cutecats2.jpg';
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
+  boutonAjouterEtiquette: boolean = false;
+  curseurSurEtiquette: boolean = false;
 
+
+  // Constructeur
   constructor() { }
 
+
+  // OnInit
   ngOnInit(): void {
 
     // Création d'un canvas vide
@@ -25,26 +31,14 @@ export class ImageComponent implements OnInit {
     this.importerImage();
     this.ajouterEtiquette();
     this.zoomer();
+  }
 
 
-    /*
-    // Chargement de la zone d'édition
-    let canvas: HTMLCanvasElement = document.getElementById("canvas") as HTMLCanvasElement;
-    let ctx: CanvasRenderingContext2D = canvas.getContext("2d") as CanvasRenderingContext2D;
-    let img: HTMLImageElement = new Image;
-
-    // Sélection de l'image
-    img.src = this.lienImage;
-
-    // Chargement de l'image
-    img.onload = function (): void {
-
-      // Modification de la zone d'édition
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-    }
-    */
+  // Bouton d'ajout d'une étiquette
+  modifierStatutEtiquette() {
+    this.boutonAjouterEtiquette = true;
+    console.log(this.ajouterEtiquette)
+    this.canvas.selection = false;
   }
 
 
@@ -68,12 +62,10 @@ export class ImageComponent implements OnInit {
 
   // Fonction pour afficher l'image de manière responsive
   resizeCanvas(image: fabric.Image): void {
-    console.log("Resizing")
     // Mise à jour des dimensions du canvas en fonction de la taille de l'image
 
     // Longeur image > hauteur image
     if ((image.width as number) > (image.height as number)) {
-      console.log("CASE A");
       this.canvas.setWidth(document.getElementById("editionCol")?.clientWidth as number);
       image.scaleToWidth(this.canvas.width as number);
       this.canvas.setHeight(image.getScaledHeight() as number)
@@ -87,7 +79,6 @@ export class ImageComponent implements OnInit {
 
     // Hauteur image > longeur image
     if ((image.height as number) > (image.width as number)) {
-      console.log("CASE B");
       this.canvas.setHeight(document.getElementById("editionCol")?.clientHeight as number);
       image.scaleToHeight(this.canvas.height as number);
       this.canvas.setWidth(image.getScaledWidth() as number)
@@ -109,49 +100,85 @@ export class ImageComponent implements OnInit {
 
   // Fonction d'ajout des étiquettes
   ajouterEtiquette() {
+
+    // Initialisation des variables
+    // Taille du rectangle
     var rect: fabric.Rect;
+
+    // Evenement souris
     var isDown: boolean;
+
+    // Origine X
     var origX: number;
+
+    // Origine Y
     var origY: number;
 
+
+    // Lorsque le clic de la souris est maintenu
     this.canvas.on('mouse:down', (o) => {
-      isDown = true;
-      var pointer = this.canvas.getPointer(o.e);
-      origX = pointer.x;
-      origY = pointer.y;
-      var pointer = this.canvas.getPointer(o.e);
-      rect = new fabric.Rect({
-        left: origX,
-        top: origY,
-        originX: 'left',
-        originY: 'top',
-        width: pointer.x - origX,
-        height: pointer.y - origY,
-        angle: 0,
-        fill: 'rgba(255,0,0,0.5)',
-        transparentCorners: false
-      });
-      this.canvas.add(rect);
-
-      this.canvas.on('mouse:move', (o) => {
-        if (!isDown) return;
+      if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
+        isDown = true;
         var pointer = this.canvas.getPointer(o.e);
+        origX = pointer.x;
+        origY = pointer.y;
+        var pointer = this.canvas.getPointer(o.e);
+        rect = new fabric.Rect({
+          left: origX,
+          top: origY,
+          originX: 'left',
+          originY: 'top',
+          width: pointer.x - origX,
+          height: pointer.y - origY,
+          angle: 0,
+          fill: 'rgba(255,0,0,0.5)',
+          transparentCorners: false
+        });
 
-        if (origX > pointer.x) {
-          rect.set({ left: Math.abs(pointer.x) });
+        // Ajouter l'étiquette au canvas
+        this.canvas.add(rect);
+        this.canvas.setActiveObject(rect);
+      }
+
+
+      // Lorsque l'on bouge la souris
+      this.canvas.on('mouse:move', (o) => {
+        if (this.boutonAjouterEtiquette == true) {
+          if (!isDown) return;
+          var pointer = this.canvas.getPointer(o.e);
+
+          if (origX > pointer.x) {
+            rect.set({ left: Math.abs(pointer.x) });
+          }
+          if (origY > pointer.y) {
+            rect.set({ top: Math.abs(pointer.y) });
+          }
+
+          rect.set({ width: Math.abs(origX - pointer.x) });
+          rect.set({ height: Math.abs(origY - pointer.y) });
+
+          this.canvas.renderAll();
         }
-        if (origY > pointer.y) {
-          rect.set({ top: Math.abs(pointer.y) });
-        }
-
-        rect.set({ width: Math.abs(origX - pointer.x) });
-        rect.set({ height: Math.abs(origY - pointer.y) });
-
-        this.canvas.renderAll();
       });
 
+      
+      // Lorsque le clic de la souris est relevé
       this.canvas.on('mouse:up', (o) => {
-        isDown = false;
+        if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
+          isDown = false;
+          this.boutonAjouterEtiquette = false;
+
+          // Réactiver sélection 
+          this.canvas.selection = true;
+
+          // Ajouter les évènement d'hover à l'étiquette
+          rect.on("mouseover", (o) => {
+            this.curseurSurEtiquette = true;
+          })
+          rect.on("mouseout", (o) => {
+            this.curseurSurEtiquette = false;
+          })
+        }
       });
     });
   }
