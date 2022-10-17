@@ -22,15 +22,24 @@ export class ImageComponent implements OnInit {
 
   // OnInit
   ngOnInit(): void {
-
     // Création d'un canvas vide
-    this.canvas = new fabric.Canvas("canvas", {});
+    this.canvas = new fabric.Canvas("canvas", {
+      uniformScaling: false
+    });
     this.canvas.defaultCursor = "Handwriting";
 
     // Ajout des fonctionnalités
     this.importerImage();
     this.ajouterEtiquette();
     this.zoomer();
+    this.limiterEtiquettes();
+
+
+    this.canvas.on("mouse:move", (o) => {
+
+    })
+
+    
   }
 
 
@@ -61,9 +70,8 @@ export class ImageComponent implements OnInit {
 
 
   // Fonction pour afficher l'image de manière responsive
-  resizeCanvas(image: fabric.Image): void {
+  resizeCanvas(image: fabric.Object): void {
     // Mise à jour des dimensions du canvas en fonction de la taille de l'image
-
     // Longeur image > hauteur image
     if ((image.width as number) > (image.height as number)) {
       this.canvas.setWidth(document.getElementById("editionCol")?.clientWidth as number);
@@ -100,7 +108,6 @@ export class ImageComponent implements OnInit {
 
   // Fonction d'ajout des étiquettes
   ajouterEtiquette() {
-
     // Initialisation des variables
     // Taille du rectangle
     var rect: fabric.Rect;
@@ -134,8 +141,10 @@ export class ImageComponent implements OnInit {
           fill: 'rgba(255,0,0,0.5)',
           transparentCorners: false
         });
+        rect.setControlsVisibility({ mtr: false });
 
         // Ajouter l'étiquette au canvas
+        this.resizeCanvas(rect);
         this.canvas.add(rect);
         this.canvas.setActiveObject(rect);
       }
@@ -161,7 +170,7 @@ export class ImageComponent implements OnInit {
         }
       });
 
-      
+
       // Lorsque le clic de la souris est relevé
       this.canvas.on('mouse:up', (o) => {
         if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
@@ -183,16 +192,48 @@ export class ImageComponent implements OnInit {
     });
   }
 
+
+  supprimerEtiquette() {
+    this.canvas.getActiveObjects().forEach(etiquette => {
+      this.canvas.remove(etiquette);
+    })
+  }
+
+
+  // Zoomer le canvas
   zoomer() {
     this.canvas.on('mouse:wheel', (opt) => {
       var delta = opt.e.deltaY;
       var zoom = this.canvas.getZoom();
       zoom *= 0.999 ** delta;
       if (zoom > 20) zoom = 20;
-      if (zoom < 0.01) zoom = 0.01;
+      if (zoom < 1) zoom = 1;
       this.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
       opt.e.preventDefault();
       opt.e.stopPropagation();
     });
+  }
+
+
+  // Limite des étiquettes
+  limiterEtiquettes() {
+    this.canvas.on('object:moving', (e: any) => {
+      var obj = e.target;
+      // if object is too big ignore
+      if(obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
+          return;
+      }
+      obj.setCoords();
+      // top-left  corner
+      if(obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
+          obj.top = Math.max(obj.top, obj.top-obj.getBoundingRect().top);
+          obj.left = Math.max(obj.left, obj.left-obj.getBoundingRect().left);
+      }
+      // bot-right corner
+      if(obj.getBoundingRect().top+obj.getBoundingRect().height  > obj.canvas.height || obj.getBoundingRect().left+obj.getBoundingRect().width  > obj.canvas.width) {
+          obj.top = Math.min(obj.top, obj.canvas.height-obj.getBoundingRect().height+obj.top-obj.getBoundingRect().top);
+          obj.left = Math.min(obj.left, obj.canvas.width-obj.getBoundingRect().width+obj.left-obj.getBoundingRect().left);
+      }
+  });
   }
 }
