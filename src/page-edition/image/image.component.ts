@@ -33,20 +33,15 @@ export class ImageComponent implements OnInit {
     this.ajouterEtiquette();
     this.zoomer();
     this.limiterEtiquettes();
-
-
-    this.canvas.on("mouse:move", (o) => {
-
-    })
-
-    
   }
 
 
   // Bouton d'ajout d'une étiquette
   modifierStatutEtiquette() {
+    // Activer l'ajout d'une étiquette
     this.boutonAjouterEtiquette = true;
-    console.log(this.ajouterEtiquette)
+
+    // Désactiver la sélection des autres étiquettes
     this.canvas.selection = false;
   }
 
@@ -144,8 +139,9 @@ export class ImageComponent implements OnInit {
         rect.setControlsVisibility({ mtr: false });
 
         // Ajouter l'étiquette au canvas
-        this.resizeCanvas(rect);
         this.canvas.add(rect);
+
+        // Sélectionner l'objet nouvellement ajouté
         this.canvas.setActiveObject(rect);
       }
 
@@ -180,7 +176,7 @@ export class ImageComponent implements OnInit {
           // Réactiver sélection 
           this.canvas.selection = true;
 
-          // Ajouter les évènement d'hover à l'étiquette
+          // Ajouter les évènements d'hover à l'étiquette
           rect.on("mouseover", (o) => {
             this.curseurSurEtiquette = true;
           })
@@ -193,6 +189,7 @@ export class ImageComponent implements OnInit {
   }
 
 
+  // Supprimer les étiquettes sélectionnées
   supprimerEtiquette() {
     this.canvas.getActiveObjects().forEach(etiquette => {
       this.canvas.remove(etiquette);
@@ -220,25 +217,26 @@ export class ImageComponent implements OnInit {
     this.canvas.on('object:moving', (e: any) => {
       var obj = e.target;
       // if object is too big ignore
-      if(obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
-          return;
+      if (obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
+        return;
       }
       obj.setCoords();
       // top-left  corner
-      if(obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
-          obj.top = Math.max(obj.top, obj.top-obj.getBoundingRect().top);
-          obj.left = Math.max(obj.left, obj.left-obj.getBoundingRect().left);
+      if (obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
+        obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top);
+        obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left);
       }
       // bot-right corner
-      if(obj.getBoundingRect().top+obj.getBoundingRect().height  > obj.canvas.height || obj.getBoundingRect().left+obj.getBoundingRect().width  > obj.canvas.width) {
-          obj.top = Math.min(obj.top, obj.canvas.height-obj.getBoundingRect().height+obj.top-obj.getBoundingRect().top);
-          obj.left = Math.min(obj.left, obj.canvas.width-obj.getBoundingRect().width+obj.left-obj.getBoundingRect().left);
+      if (obj.getBoundingRect().top + obj.getBoundingRect().height > obj.canvas.height || obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas.width) {
+        obj.top = Math.min(obj.top, obj.canvas.height - obj.getBoundingRect().height + obj.top - obj.getBoundingRect().top);
+        obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left);
       }
-  });
-}
+    });
+  }
 
 
+  // Recentrer la caméra
   recentrerCamera() {
-    this.canvas.setViewportTransform([1,0,0,1,0,0]);
+    this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
   }
 }
