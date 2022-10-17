@@ -235,5 +235,10 @@ export class ImageComponent implements OnInit {
           obj.left = Math.min(obj.left, obj.canvas.width-obj.getBoundingRect().width+obj.left-obj.getBoundingRect().left);
       }
   });
+}
+
+
+  recentrerCamera() {
+    this.canvas.setViewportTransform([1,0,0,1,0,0]);
   }
 }
