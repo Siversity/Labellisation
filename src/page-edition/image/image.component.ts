@@ -22,22 +22,26 @@ export class ImageComponent implements OnInit {
 
   // OnInit
   ngOnInit(): void {
-
     // Création d'un canvas vide
-    this.canvas = new fabric.Canvas("canvas", {});
+    this.canvas = new fabric.Canvas("canvas", {
+      uniformScaling: false
+    });
     this.canvas.defaultCursor = "Handwriting";
 
     // Ajout des fonctionnalités
     this.importerImage();
     this.ajouterEtiquette();
     this.zoomer();
+    this.limiterEtiquettes();
   }
 
 
   // Bouton d'ajout d'une étiquette
   modifierStatutEtiquette() {
+    // Activer l'ajout d'une étiquette
     this.boutonAjouterEtiquette = true;
-    console.log(this.ajouterEtiquette)
+
+    // Désactiver la sélection des autres étiquettes
     this.canvas.selection = false;
   }
 
@@ -61,9 +65,8 @@ export class ImageComponent implements OnInit {
 
 
   // Fonction pour afficher l'image de manière responsive
-  resizeCanvas(image: fabric.Image): void {
+  resizeCanvas(image: fabric.Object): void {
     // Mise à jour des dimensions du canvas en fonction de la taille de l'image
-
     // Longeur image > hauteur image
     if ((image.width as number) > (image.height as number)) {
       this.canvas.setWidth(document.getElementById("editionCol")?.clientWidth as number);
@@ -100,7 +103,6 @@ export class ImageComponent implements OnInit {
 
   // Fonction d'ajout des étiquettes
   ajouterEtiquette() {
-
     // Initialisation des variables
     // Taille du rectangle
     var rect: fabric.Rect;
@@ -134,9 +136,12 @@ export class ImageComponent implements OnInit {
           fill: 'rgba(255,0,0,0.5)',
           transparentCorners: false
         });
+        rect.setControlsVisibility({ mtr: false });
 
         // Ajouter l'étiquette au canvas
         this.canvas.add(rect);
+
+        // Sélectionner l'objet nouvellement ajouté
         this.canvas.setActiveObject(rect);
       }
 
@@ -161,7 +166,7 @@ export class ImageComponent implements OnInit {
         }
       });
 
-      
+
       // Lorsque le clic de la souris est relevé
       this.canvas.on('mouse:up', (o) => {
         if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
@@ -171,7 +176,7 @@ export class ImageComponent implements OnInit {
           // Réactiver sélection 
           this.canvas.selection = true;
 
-          // Ajouter les évènement d'hover à l'étiquette
+          // Ajouter les évènements d'hover à l'étiquette
           rect.on("mouseover", (o) => {
             this.curseurSurEtiquette = true;
           })
@@ -183,6 +188,16 @@ export class ImageComponent implements OnInit {
     });
   }
 
+
+  // Supprimer les étiquettes sélectionnées
+  supprimerEtiquette() {
+    this.canvas.getActiveObjects().forEach(etiquette => {
+      this.canvas.remove(etiquette);
+    })
+  }
+
+
+  // Zoomer le canvas
   zoomer() {
     this.canvas.on('mouse:wheel', (opt) => {
       var delta = opt.e.deltaY;
@@ -199,7 +214,32 @@ export class ImageComponent implements OnInit {
     });
   }
 
+
+  // Limite des étiquettes
+  limiterEtiquettes() {
+    this.canvas.on('object:moving', (e: any) => {
+      var obj = e.target;
+      // if object is too big ignore
+      if (obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
+        return;
+      }
+      obj.setCoords();
+      // top-left  corner
+      if (obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
+        obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top);
+        obj.left = Math.max(obj.left, obj.left - obj.getBoundingRect().left);
+      }
+      // bot-right corner
+      if (obj.getBoundingRect().top + obj.getBoundingRect().height > obj.canvas.height || obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas.width) {
+        obj.top = Math.min(obj.top, obj.canvas.height - obj.getBoundingRect().height + obj.top - obj.getBoundingRect().top);
+        obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left);
+      }
+    });
+  }
+
+
+  // Recentrer la caméra
   recentrerCamera() {
-    this.canvas.setViewportTransform([1,0,0,1,0,0]);
+    this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
   }
 }
