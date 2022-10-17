@@ -15,6 +15,7 @@ import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.componen
   imports: [
     BrowserModule,
     AppRoutingModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

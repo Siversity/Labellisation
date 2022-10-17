@@ -30,6 +30,7 @@ export class ImageComponent implements OnInit {
     // Ajout des fonctionnalités
     this.importerImage();
     this.ajouterEtiquette();
+    this.zoomer();
   }
 
 
@@ -182,4 +183,16 @@ export class ImageComponent implements OnInit {
     });
   }
 
+  zoomer() {
+    this.canvas.on('mouse:wheel', (opt) => {
+      var delta = opt.e.deltaY;
+      var zoom = this.canvas.getZoom();
+      zoom *= 0.999 ** delta;
+      if (zoom > 20) zoom = 20;
+      if (zoom < 0.01) zoom = 0.01;
+      this.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+      opt.e.preventDefault();
+      opt.e.stopPropagation();
+    });
+  }
 }
