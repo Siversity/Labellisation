@@ -26,21 +26,5 @@ export class PageEditionComponent implements OnInit {
   loadSidebarGauche(test: string) {
     
   }
-  
-  zoomOut(){
-    this.zoom=false;
-  }
-  zoomIn(){
-    
-    this.zoom=true;
-  }
-  getheight(){
-    if(this.zoom==true){
-      return '500px';
-    }
-    else{
-      return '200px';
-      }
-  }
 
 }
