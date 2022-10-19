@@ -10,7 +10,7 @@
     "class": "Test"
   },
   {
-    "box": [300, 100, 200, 100],
+    "box": [300, 100, 200, 200],
     "text": "Etiquette 3",
     "class": "Test"
   }

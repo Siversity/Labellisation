@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ImageComponent } from './image/image.component';
 
 @Component({
   selector: 'app-page-edition',
@@ -7,24 +8,23 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PageEditionComponent implements OnInit {
 
-  img : any = "../assets/images/Capture.PNG";
-  zoom:boolean=false;
-  @Input() placementEtiquette : any = false;
+  // Composant Image
+  //@ts-ignore
+  @ViewChild(ImageComponent) image: ImageComponent;
 
-  
-  activerPlacementEtiquette(value : any) {
-    this.placementEtiquette = value;
-    console.log(this.placementEtiquette);
-  }
 
+  // Constructeur
   constructor() { }
 
+
+  // A l'initialisation
   ngOnInit(): void {
   }
 
-  // Chargement du component SidebarGauche
-  loadSidebarGauche(test: string) {
-    
+
+  // On force le composant enfant Image à ajouter une étiquette
+  pageEditionAjouterEtiquetteVersImage = () => {
+    this.image.modifierStatutEtiquette();
   }
 
 }

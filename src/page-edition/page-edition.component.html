@@ -7,12 +7,12 @@
 
         <!-- On crée la colonne de la SidebarGauche -->
         <div class="col-2 border">
-            <app-sidebar-gauche (onAjoutEtiquette)="activerPlacementEtiquette($event)"></app-sidebar-gauche>
+            <app-sidebar-gauche [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"></app-sidebar-gauche>
         </div>
 
         <!-- On crée la colonne de la zone d'affichage de l'Image -->
         <div id="editionCol" class="col-7 border d-flex align-items-center justify-content-center">
-            <app-image [boutonAjouterEtiquette]="placementEtiquette"></app-image>
+            <app-image></app-image>
         </div>
 
         <!-- On crée la colonne de la SidebarDroite-->

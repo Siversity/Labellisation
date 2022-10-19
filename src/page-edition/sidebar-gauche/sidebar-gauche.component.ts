@@ -8,17 +8,24 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 export class SidebarGaucheComponent implements OnInit {
 
-  @Output() onAjoutEtiquette = new EventEmitter<any>();
 
-  ajoutEtiquette(value : any) {
-    this.onAjoutEtiquette.emit(value);
-    console.log(value)
+  // Variables
+  //@ts-ignore
+  @Input() sbgLancerEventAjoutEtiquetteVersPageEdition: () => void;
+
+
+  // Constructeur
+  constructor() { }
+
+
+  // A l'initialisation
+  ngOnInit(): void {
   }
 
 
-  constructor() { }
-
-  ngOnInit(): void {
+  // Event : lorsque l'on clique sur le bouton ajouter une étiquette
+  eventBoutonAjouterEtiquette() {
+    this.sbgLancerEventAjoutEtiquetteVersPageEdition();
   }
 
 }
