@@ -22,9 +22,15 @@ export class PageEditionComponent implements OnInit {
   }
 
 
-  // On force le composant enfant Image à ajouter une étiquette
+  // On force le composant enfant Image à ajouter une étiquette depuis l'enfant SidebarGauche
   pageEditionAjouterEtiquetteVersImage = () => {
     this.image.modifierStatutEtiquette();
+  }
+
+
+  // On force le composant enfant Image à sauvegarder les étiquettes depuis l'enfant SidebarDroite
+  pageEditionSauvegarderEtiquetteVersImage = () => {
+    this.image.sauvegarderEtiquettes();
   }
 
 }

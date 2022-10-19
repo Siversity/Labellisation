@@ -2,6 +2,8 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { fabric } from 'fabric';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+const fs = require('fs');
+
 
 @Component({
   selector: 'app-image',
@@ -295,5 +297,32 @@ export class ImageComponent implements OnInit {
       }).catch(function () {
         console.log("error");
       });
+  }
+
+
+  // Sauvegarde des changements effectués
+  sauvegarderEtiquettes() {
+    console.log("Début de la sauvegarde des étiquettes");
+
+    // On initialise une liste vide qui va contenir le JSON de chaque étiquette
+    let listeEtiquettesJSON: any = [];
+
+    // Pour chaque étiquette, on crée un JSON
+    this.canvas.getObjects().forEach(etiquette => {
+      if (etiquette.type != "image") {
+
+        // Création de l'étiquette
+        let etiquetteJSON = {
+          box: [etiquette.left, etiquette.top, etiquette.width, etiquette.height],
+          text: "Test",
+          class: "Test"
+        }
+
+        // On ajoute l'étiquette dans notre liste
+        listeEtiquettesJSON.push(etiquetteJSON);
+      }
+    })
+
+    console.log(listeEtiquettesJSON);
   }
 }
