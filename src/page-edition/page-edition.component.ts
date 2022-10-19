@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-page-edition',
@@ -9,6 +9,13 @@ export class PageEditionComponent implements OnInit {
 
   img : any = "../assets/images/Capture.PNG";
   zoom:boolean=false;
+  @Input() placementEtiquette : any = false;
+
+  
+  activerPlacementEtiquette(value : any) {
+    this.placementEtiquette = value;
+    console.log(this.placementEtiquette);
+  }
 
   constructor() { }
 

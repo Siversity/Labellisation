@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { fabric } from 'fabric';
 
 @Component({
@@ -10,10 +10,11 @@ import { fabric } from 'fabric';
 export class ImageComponent implements OnInit {
 
   // Variables
+  @Input() boutonAjouterEtiquette: boolean = false;
+  curseurSurEtiquette: boolean = false;
   lienImage: string = 'assets/images/cutecats2.jpg';
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
-  boutonAjouterEtiquette: boolean = false;
-  curseurSurEtiquette: boolean = false;
+  
 
 
   // Constructeur
