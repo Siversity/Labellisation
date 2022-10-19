@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { fabric } from 'fabric';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
@@ -12,11 +12,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class ImageComponent implements OnInit {
 
   // Variables
+  @Input() boutonAjouterEtiquette: boolean = false;
+  curseurSurEtiquette: boolean = false;
   lienImage: string = 'assets/images/cutecats2.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
-  boutonAjouterEtiquette: boolean = false;
-  curseurSurEtiquette: boolean = false;
+  
   httpClient: HttpClient | undefined;
 
 

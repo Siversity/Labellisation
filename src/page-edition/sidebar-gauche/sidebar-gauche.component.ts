@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar-gauche',
@@ -8,30 +8,17 @@ import { Component, OnInit } from '@angular/core';
 
 export class SidebarGaucheComponent implements OnInit {
 
+  @Output() onAjoutEtiquette = new EventEmitter<any>();
+
+  ajoutEtiquette(value : any) {
+    this.onAjoutEtiquette.emit(value);
+    console.log(value)
+  }
+
+
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-}
-
-export class AppComponent {  
-  zoom:boolean=false;
-  zoomOut(){
-    this.zoom=false;
-  }
-  zoomIn(){
-    
-    this.zoom=true;
-  }
-  getheight(){
-    if(this.zoom==true){
-      return '500px';
-      //return your desiderd value in pixel or in percentage
-    }
-    else{
-      return '200px';
-      }
   }
 
 }
