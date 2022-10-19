@@ -1,5 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { fabric } from 'fabric';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-image',
@@ -13,8 +15,10 @@ export class ImageComponent implements OnInit {
   @Input() boutonAjouterEtiquette: boolean = false;
   curseurSurEtiquette: boolean = false;
   lienImage: string = 'assets/images/cutecats2.jpg';
+  lienJSON: string = 'assets/jsons/cutecats2.json';
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
   
+  httpClient: HttpClient | undefined;
 
 
   // Constructeur
@@ -34,6 +38,7 @@ export class ImageComponent implements OnInit {
     this.ajouterEtiquette();
     this.zoomer();
     this.limiterEtiquettes();
+    this.chargerEtiquettes();
   }
 
 
@@ -243,4 +248,62 @@ export class ImageComponent implements OnInit {
   recentrerCamera() {
     this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
   }
+
+
+  afficherPositionEtiquette() {
+    /*
+    this.canvas.on("mouse:move", (o) => {
+      let pointer = this.canvas.getPointer(o.e);
+      let posX = pointer.x;
+      let posY = pointer.y;
+      console.log("(" + posX + ", " + posY + ")" );
+    })
+    */
+    console.log("Point : (" + Math.round(this.canvas.getObjects()[1].left as number) + ", " + Math.round(this.canvas.getObjects()[1].top as number) + ")");
+    console.log("Taille : " + Math.round(this.canvas.getObjects()[1].width as number) + "x" + Math.round(this.canvas.getObjects()[1].height as number));
+  }
+
+
+  chargerEtiquettes() {
+
+
+
+  }
+
+
+  // Lorsque le composant est initialisé
+  ngAfterContentInit() {
+
+    // On récupère le JSON existant
+    fetch(this.lienJSON).then(data => data.json())
+      .then(listeEtiquettes => {
+
+        console.log(listeEtiquettes)
+
+        // On affiche chaque étiquette
+        listeEtiquettes.forEach((etiquette: any) => {
+
+          // Création de l'objet
+          let rect = new fabric.Rect({
+            left: etiquette.box[0],
+            top: etiquette.box[1],
+            originX: 'left',
+            originY: 'top',
+            width: etiquette.box[2],
+            height: etiquette.box[3],
+            angle: 0,
+            fill: 'rgba(255,0,0,0.5)',
+            transparentCorners: false
+          });
+
+          // On désactive la rotation de l'objet
+          rect.setControlsVisibility({ mtr: false });
+
+          // On ajoute l'étiquette au canvas
+          this.canvas.add(rect);
+        })
+      });
+  }
+
+
 }
