@@ -12,7 +12,10 @@ export class SidebarGaucheComponent implements OnInit {
   // Variables
   //@ts-ignore
   @Input() sbgLancerEventAjoutEtiquetteVersPageEdition: () => void;
-
+  //@ts-ignore
+  @Input() sbgLancerEventSupprimerEtiquetteVersPageEdition: () => void;
+  //@ts-ignore
+  @Input() sbgLancerEventCentrerCameraVersPageEdition: () => void;
 
   // Constructeur
   constructor() { }
@@ -28,4 +31,11 @@ export class SidebarGaucheComponent implements OnInit {
     this.sbgLancerEventAjoutEtiquetteVersPageEdition();
   }
 
+  eventBoutonSupprimerEtiquette() {
+    this.sbgLancerEventSupprimerEtiquetteVersPageEdition();
+  }
+
+  eventBoutonCentrerCamera() {
+    this.sbgLancerEventCentrerCameraVersPageEdition();
+  }
 }

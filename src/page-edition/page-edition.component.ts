@@ -11,6 +11,7 @@ export class PageEditionComponent implements OnInit {
   // Composant Image
   //@ts-ignore
   @ViewChild(ImageComponent) image: ImageComponent;
+  
 
 
   // Constructeur
@@ -27,10 +28,18 @@ export class PageEditionComponent implements OnInit {
     this.image.modifierStatutEtiquette();
   }
 
-
-  // On force le composant enfant Image à sauvegarder les étiquettes depuis l'enfant SidebarDroite
-  pageEditionSauvegarderEtiquetteVersImage = () => {
-    this.image.sauvegarderEtiquettes();
+  // On force le composant enfant Image à supprimer une ou des étiquettes
+  pageEditionSupprimerEtiquetteVersImage = () => {
+    this.image.supprimerEtiquette();
   }
 
+  // On force le composant enfant Image à centrer la caméra
+  pageEditionCentrerCameraVersImage = () => {
+    this.image.recentrerCamera();
+  }
+
+  pageEditionSauvegarderEtiquettesVersImage = () => {
+    this.image.sauvegarderEtiquettes();
+  }
 }
+

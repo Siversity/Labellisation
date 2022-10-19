@@ -7,7 +7,10 @@
 
         <!-- On crée la colonne de la SidebarGauche -->
         <div class="col-2 border">
-            <app-sidebar-gauche [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"></app-sidebar-gauche>
+            <app-sidebar-gauche 
+            [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"
+            [sbgLancerEventSupprimerEtiquetteVersPageEdition]="pageEditionSupprimerEtiquetteVersImage"
+            [sbgLancerEventCentrerCameraVersPageEdition]="pageEditionCentrerCameraVersImage"></app-sidebar-gauche>
         </div>
 
         <!-- On crée la colonne de la zone d'affichage de l'Image -->
@@ -17,7 +20,7 @@
 
         <!-- On crée la colonne de la SidebarDroite-->
         <div class="col-3 border">
-            <app-sidebar-droite [sbdLancerEventSauvegarderEtiquetteVersPageEdition]="pageEditionSauvegarderEtiquetteVersImage"></app-sidebar-droite>
+            <app-sidebar-droite [sbdLancerEventSauvegarderEtiquetteVersPageEdition]="pageEditionSauvegarderEtiquettesVersImage"></app-sidebar-droite>
         </div>
 
     </div>

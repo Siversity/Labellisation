@@ -1,6 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { fabric } from 'fabric';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 const fs = require('fs');
 
@@ -14,7 +13,7 @@ const fs = require('fs');
 export class ImageComponent implements OnInit {
 
   // Variables
-  @Input() boutonAjouterEtiquette: boolean = false;
+  boutonAjouterEtiquette: boolean = false;
   curseurSurEtiquette: boolean = false;
   lienImage: string = 'assets/images/cutecats2.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
