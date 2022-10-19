@@ -37,7 +37,6 @@ export class ImageComponent implements OnInit {
     this.ajouterEtiquette();
     this.zoomer();
     this.limiterEtiquettes();
-    this.chargerEtiquettes();
   }
 
 
@@ -263,13 +262,6 @@ export class ImageComponent implements OnInit {
   }
 
 
-  chargerEtiquettes() {
-
-
-
-  }
-
-
   // Lorsque le composant est initialisé
   ngAfterContentInit() {
 
@@ -301,8 +293,8 @@ export class ImageComponent implements OnInit {
           // On ajoute l'étiquette au canvas
           this.canvas.add(rect);
         })
+      }).catch(function () {
+        console.log("error");
       });
   }
-
-
 }
