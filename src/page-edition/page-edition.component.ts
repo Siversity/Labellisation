@@ -25,7 +25,7 @@ export class PageEditionComponent implements OnInit {
 
   // On force le composant enfant Image à ajouter une étiquette depuis l'enfant SidebarGauche
   pageEditionAjouterEtiquetteVersImage = () => {
-    this.image.modifierStatutEtiquette();
+    this.image.activerAjoutEtiquette();
   }
 
   // On force le composant enfant Image à supprimer une ou des étiquettes
@@ -35,9 +35,10 @@ export class PageEditionComponent implements OnInit {
 
   // On force le composant enfant Image à centrer la caméra
   pageEditionCentrerCameraVersImage = () => {
-    this.image.recentrerCamera();
+    this.image.recentrerImage();
   }
 
+  // On force le composant à sauvegarder les images
   pageEditionSauvegarderEtiquettesVersImage = () => {
     this.image.sauvegarderEtiquettes();
   }
