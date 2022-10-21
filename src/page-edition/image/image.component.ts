@@ -25,7 +25,7 @@ export class ImageComponent implements OnInit {
   curseurSurEtiquette: boolean = false;
 
   // Données image
-  lienImage: string = 'assets/images/cutecats1.jpg';
+  lienImage: string = 'assets/images/cutecats3.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
 
 
@@ -122,12 +122,15 @@ export class ImageComponent implements OnInit {
     // Lorsque le clic de la souris est maintenu
     this.canvas.on('mouse:down', (o) => {
 
+      // Mise à jour du pointer (souris)
       var pointer = this.canvas.getPointer(o.e);
         origX = pointer.x;
         origY = pointer.y;
         var pointer = this.canvas.getPointer(o.e);
+
       if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
         mouseIsDown = true;
+
         /*
         var pointer = this.canvas.getPointer(o.e);
         origX = pointer.x;
@@ -233,6 +236,9 @@ export class ImageComponent implements OnInit {
     etiquette.on('scaling', () => {
       this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
     })
+    etiquette.on('selected', () => {
+      this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
+    })
     etiquette.on('moving', () => {
       this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
     })
@@ -318,6 +324,23 @@ export class ImageComponent implements OnInit {
 
     console.log(JSON.stringify(listeEtiquettesJSON));
   }
+
+
+  // Fonction pour actualiser les étiquettes
+  actualiserEtiquette(texte: string, classe: string, coordX: number, coordY: number, tailleX: number, tailleY: number) {
+    console.log(texte, classe, coordX, coordY, tailleX, tailleY)
+
+    let etiquette: fabric.Object = this.canvas.getActiveObjects()[0];
+    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+
+    etiquette.left = coordX * ratio;
+    etiquette.top = coordY * ratio;
+    etiquette.width = tailleX * ratio;
+    etiquette.height = tailleY * ratio;
+    
+    this.canvas.renderAll();
+
+  }
   //#endregion
 
 
@@ -345,7 +368,7 @@ export class ImageComponent implements OnInit {
   // Fonction pour afficher l'image de manière responsive
   tailleImage(image: fabric.Object): void {
     // Longeur image > hauteur image
-    if ((image.width as number) > (image.height as number)) {
+    if ((image.width as number) >= (image.height as number)) {
       this.canvas.setWidth(document.getElementById("editionCol")?.clientWidth as number);
       image.scaleToWidth(this.canvas.width as number);
       this.canvas.setHeight(image.getScaledHeight() as number)

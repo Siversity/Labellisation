@@ -68,6 +68,10 @@ export class PageEditionComponent implements OnInit {
   pageEditionSauvegarderEtiquettesVersImage = () => {
     this.image.sauvegarderEtiquettes();
   }
+
+  pageEditionActualiserEtiquetteVersImage = (texte: string, classe: string, coordX: number, coordY: number, tailleX: number, tailleY: number) => {
+    this.image.actualiserEtiquette(texte, classe, coordX, coordY, tailleX, tailleY);
+  }
   //#endregion
 
 
