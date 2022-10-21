@@ -15,7 +15,7 @@ export class ImageComponent implements OnInit {
   ///////////////
   // Fonctions appelé par parent
   //@ts-ignore
-  @Input() imageEnvoyerInfoVersPageEdition : (etiquette : Etiquette) => void;
+  @Input() imageEnvoyerInfoVersPageEdition: (etiquette: Etiquette) => void;
 
   // Stockage du canvas utilisé
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
@@ -27,7 +27,7 @@ export class ImageComponent implements OnInit {
   // Données image
   lienImage: string = 'assets/images/cutecats1.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
-  
+
 
   //////////////////
   // CONSTRUCTEUR //
@@ -43,14 +43,18 @@ export class ImageComponent implements OnInit {
   ngOnInit(): void {
     // Création d'un canvas vide
     this.canvas = new fabric.Canvas("canvas", {
-      uniformScaling: false,
+      uniformScaling: false
     });
+
+    // Désactiver la rotation lors d'une sélection multiple
+    fabric.Group.prototype.hasControls = false;
+
+    // Changement du type de curseur
     this.canvas.defaultCursor = "Handwriting";
 
     // Création du canvas et import de l'image
     this.importerImage();
     this.chargerEtiquettes();
-
   }
 
   // Lorsque le composant est initialisé
@@ -217,7 +221,7 @@ export class ImageComponent implements OnInit {
 
 
   // Fonction d'ajout des évènements d'affichage des infos
-  ajouterEvenementsEtiquettes(etiquette : fabric.Rect, etiquetteJSON: Etiquette) {
+  ajouterEvenementsEtiquettes(etiquette: fabric.Rect, etiquetteJSON: Etiquette) {
     // On ajoute l'événement de sélection de l'étiquette
     etiquette.on('scaling', () => {
       this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
@@ -229,19 +233,19 @@ export class ImageComponent implements OnInit {
 
 
   // Fonction d'affichage des informations vers la SidebarDroite
-  ajouterEvenementAffichageInformations(etiquette : fabric.Rect, texte : string, classe : string) {
-      // Récupération du ratio de l'image
-      let ratio : number = this.canvas.getObjects()[0].scaleX as number;
+  ajouterEvenementAffichageInformations(etiquette: fabric.Rect, texte: string, classe: string) {
+    // Récupération du ratio de l'image
+    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
 
-      // Création de l'objet Etiquette à afficher sur la SidebarDroite
-      let etiquetteJSON : Etiquette = {
-        box : [etiquette.left as number / ratio, etiquette.top as number / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
-        text : texte,
-        class : classe
-      }
-      
-      // Envoi de l'étiquette vers la SidebarDroite
-      this.imageEnvoyerInfoVersPageEdition(etiquetteJSON);
+    // Création de l'objet Etiquette à afficher sur la SidebarDroite
+    let etiquetteJSON: Etiquette = {
+      box: [etiquette.left as number / ratio, etiquette.top as number / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
+      text: texte,
+      class: classe
+    }
+
+    // Envoi de l'étiquette vers la SidebarDroite
+    this.imageEnvoyerInfoVersPageEdition(etiquetteJSON);
   }
   //#endregion
 
