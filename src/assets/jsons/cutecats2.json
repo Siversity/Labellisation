@@ -3,15 +3,5 @@
     "box": [100, 0, 200, 100],
     "text": "Etiquette 1",
     "class": "Test"
-  },
-  {
-    "box": [100, 500, 200, 100],
-    "text": "Etiquette 2",
-    "class": "Test"
-  },
-  {
-    "box": [300, 100, 200, 200],
-    "text": "Etiquette 3",
-    "class": "Test"
   }
 ]

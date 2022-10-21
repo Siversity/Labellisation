@@ -1,8 +1,6 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
-import { textureSize } from 'fabric/fabric-impl';
 import { Etiquette } from 'src/Etiquette';
-
 
 @Component({
   selector: 'app-image',
@@ -12,15 +10,24 @@ import { Etiquette } from 'src/Etiquette';
 
 export class ImageComponent implements OnInit {
 
-  // Variables
-  boutonAjouterEtiquette: boolean = false;
-  curseurSurEtiquette: boolean = false;
-  lienImage: string = 'assets/images/cutecats2.jpg';
-  lienJSON: string = 'assets/jsons/cutecats2.json';
+  ///////////////
+  // VARIABLES //
+  ///////////////
+  // Stockage du canvas utilisé
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
 
+  // Gestion des évènements d'ajout
+  boutonAjouterEtiquette: boolean = false;
+  curseurSurEtiquette: boolean = false;
 
-  // Constructeur
+  // Données image
+  lienImage: string = 'assets/images/cutecats2.jpg';
+  lienJSON: string = 'assets/jsons/cutecats2.json';
+  
+
+  //////////////////
+  // CONSTRUCTEUR //
+  //////////////////
   constructor() { }
 
 
@@ -32,22 +39,22 @@ export class ImageComponent implements OnInit {
   ngOnInit(): void {
     // Création d'un canvas vide
     this.canvas = new fabric.Canvas("canvas", {
-      uniformScaling: false
+      uniformScaling: false,
     });
     this.canvas.defaultCursor = "Handwriting";
 
     // Création du canvas et import de l'image
     this.importerImage();
-
-    // Chargement des étiquettes
     this.chargerEtiquettes();
+
   }
 
   // Lorsque le composant est initialisé
   ngAfterContentInit() {
+    // Ajout des fonctionnalités d'édition
     this.ajouterEtiquette();
-    this.zoomerImage();
     this.limiterEtiquettes();
+    this.zoomerImage();
   }
   //#endregion
 
@@ -63,18 +70,6 @@ export class ImageComponent implements OnInit {
 
     // Désactiver la sélection des autres étiquettes
     this.canvas.selection = false;
-  }
-
-
-  // Vérificateur d'ajout d'une étiquette
-  ajoutEtiquettePossible(): boolean {
-    // Si le bouton d'ajout a été sélectionné et le curseur n'est pas sur une étiquette déjà existante
-    if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
-      return true;
-    }
-    else {
-      return false;
-    }
   }
   //#endregion
 
@@ -118,7 +113,7 @@ export class ImageComponent implements OnInit {
 
     // Lorsque le clic de la souris est maintenu
     this.canvas.on('mouse:down', (o) => {
-      if (this.ajoutEtiquettePossible()) {
+      if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
         mouseIsDown = true;
         var pointer = this.canvas.getPointer(o.e);
         origX = pointer.x;
@@ -183,17 +178,21 @@ export class ImageComponent implements OnInit {
         // On affiche chaque étiquette
         listeEtiquettes.forEach((etiquetteJSON: any) => {
 
-          console.log(etiquetteJSON)
-
           // Création de l'objet
           let etiquette: fabric.Rect = this.creerEtiquette(etiquetteJSON.box[0], etiquetteJSON.box[1], etiquetteJSON.box[2], etiquetteJSON.box[3]);
 
-          console.log(etiquette)
-          // On ajoute l'étiquette au canvas
-          this.canvas.add(etiquette);
+          // On ajoute l'événement de sélection de l'étiquette
           etiquette.on('selected', (o) => {
             this.recupererDonneesEtiquette(etiquetteJSON);
           });
+
+          // Ajouter les évènements d'hover à l'étiquette
+          etiquette.on("mouseover", (o) => {
+            this.curseurSurEtiquette = true;
+          })
+          etiquette.on("mouseout", (o) => {
+            this.curseurSurEtiquette = false;
+          })
         })
       }).catch(function () {
         console.log("Impossible de charger les étiquettes");
@@ -248,13 +247,16 @@ export class ImageComponent implements OnInit {
     // On initialise une liste vide qui va contenir le JSON de chaque étiquette
     let listeEtiquettesJSON: Etiquette[] = [];
 
+    // On récupère le ratio de l'image
+    let ratio = this.canvas.getObjects()[0].scaleX;
+
     // Pour chaque étiquette, on crée un JSON
     this.canvas.getObjects().forEach((etiquette: fabric.Object) => {
       if (etiquette.type != "image") {
-
         // Création de l'étiquette
         let etiquetteJSON: Etiquette = {
-          box: [etiquette.left, etiquette.top, etiquette.width, etiquette.height],
+          //@ts-ignore
+          box: [etiquette.left / ratio, etiquette.top / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
           text: "Test",
           class: "Test"
         }
@@ -323,6 +325,9 @@ export class ImageComponent implements OnInit {
         this.canvas.setWidth(image.getScaledWidth() as number)
       }
     }
+
+    console.log(image)
+
   }
 
   // Zoomer le canvas
@@ -347,13 +352,6 @@ export class ImageComponent implements OnInit {
     this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
   }
   //#endregion
-
-
-
-
-
-
-
 
 
 }
