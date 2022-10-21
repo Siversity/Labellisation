@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { Etiquette } from 'src/Etiquette';
 
@@ -13,6 +13,10 @@ export class ImageComponent implements OnInit {
   ///////////////
   // VARIABLES //
   ///////////////
+  // Fonctions appelé par parent
+  //@ts-ignore
+  @Input() imageEnvoyerInfoVersPageEdition : (etiquette : Etiquette) => void;
+
   // Stockage du canvas utilisé
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
 
@@ -123,7 +127,7 @@ export class ImageComponent implements OnInit {
         // Création de l'étiquette
         etiquette = this.creerEtiquette(origX, origY, pointer.x - origX, pointer.y - origY);
 
-        this.recupererDonneesEtiquette({ text : "", class : "", box : [etiquette.left, etiquette.top, etiquette.width, etiquette.height] });
+        this.ajouterEvenementAffichageInformations(etiquette, "", "");
 
         // Sélectionner l'étiquette nouvellement créée
         this.canvas.setActiveObject(etiquette);
@@ -182,9 +186,7 @@ export class ImageComponent implements OnInit {
           let etiquette: fabric.Rect = this.creerEtiquette(etiquetteJSON.box[0], etiquetteJSON.box[1], etiquetteJSON.box[2], etiquetteJSON.box[3]);
 
           // On ajoute l'événement de sélection de l'étiquette
-          etiquette.on('selected', (o) => {
-            this.recupererDonneesEtiquette(etiquetteJSON);
-          });
+          this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
 
           // Ajouter les évènements d'hover à l'étiquette
           etiquette.on("mouseover", (o) => {
@@ -199,10 +201,18 @@ export class ImageComponent implements OnInit {
       });
   }
 
-  recupererDonneesEtiquette(etiquette : Etiquette) {
-    console.log(etiquette.box);
-    console.log(etiquette.class);
-    console.log(etiquette.text);
+  ajouterEvenementAffichageInformations(etiquette : fabric.Rect, texte : string, classe : string) {
+    etiquette.on('selected', () => {
+      let ratio : number = this.canvas.getObjects()[0].getScaledWidth();
+
+      let etiquetteJSON : Etiquette = {
+        box : [etiquette.left, etiquette.top, (etiquette.width as number * etiquette.getScaledWidth()) / ratio, (etiquette.height as number * etiquette.getScaledHeight()) / ratio],
+        text : texte,
+        class : classe
+      }
+      
+      this.imageEnvoyerInfoVersPageEdition(etiquetteJSON);
+    })
   }
   //#endregion
 

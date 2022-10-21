@@ -1,3 +1,4 @@
+import { Etiquette } from './../Etiquette';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ImageComponent } from './image/image.component';
 import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.component';
@@ -74,8 +75,8 @@ export class PageEditionComponent implements OnInit {
   // IMAGE ==> SIDEBAR DROITE //
   //////////////////////////////
   //#region
-  pageEditionAfficherListeEtiquettesVersSBD = () => {
-    
+  pageEditionEnvoyerInfoVersSbd = (etiquette : Etiquette) => {
+    this.sbd.afficherInformationEtiquette(etiquette);
   }
   //#endregion
 

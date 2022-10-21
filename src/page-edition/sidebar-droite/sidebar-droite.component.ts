@@ -1,3 +1,4 @@
+import { Etiquette } from './../../Etiquette';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -11,6 +12,13 @@ export class SidebarDroiteComponent implements OnInit {
   ///////////////
   // VARIABLES //
   ///////////////
+  // Variables d'informations d'étiquette
+  coordX : number = -1
+  coordY : number = -1;
+  tailleX : number = -1;
+  tailleY : number = -1;
+  texte : string = "";
+  classe : string = "";
   
   // Fonction d'appel de la sauvegarde
   //@ts-ignore
@@ -39,6 +47,16 @@ export class SidebarDroiteComponent implements OnInit {
   // Event : lorsque l'on clique sur le bouton sauvegarder
   eventSauvegarderEtiquette() {
     this.sbdLancerEventSauvegarderEtiquetteVersPageEdition();
+  }
+
+  // À la sélection d'une étiquette
+  afficherInformationEtiquette(etiquette : Etiquette) {
+    this.coordX = etiquette.box[0] as number;
+    this.coordY = etiquette.box[1] as number;
+    this.tailleX = etiquette.box[2] as number;
+    this.tailleY = etiquette.box[3] as number;
+    this.texte = etiquette.text;
+    this.classe = etiquette.class;
   }
   //#endregion
 
