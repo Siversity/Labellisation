@@ -182,8 +182,10 @@ export class ImageComponent implements OnInit {
         // On affiche chaque étiquette
         listeEtiquettes.forEach((etiquetteJSON: any) => {
 
+          let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+
           // Création de l'objet
-          let etiquette: fabric.Rect = this.creerEtiquette(etiquetteJSON.box[0], etiquetteJSON.box[1], etiquetteJSON.box[2], etiquetteJSON.box[3]);
+          let etiquette: fabric.Rect = this.creerEtiquette(etiquetteJSON.box[0] * ratio, etiquetteJSON.box[1] * ratio, etiquetteJSON.box[2] * ratio, etiquetteJSON.box[3] * ratio);
 
           // On ajoute l'événement de sélection de l'étiquette
           this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
@@ -203,10 +205,10 @@ export class ImageComponent implements OnInit {
 
   ajouterEvenementAffichageInformations(etiquette : fabric.Rect, texte : string, classe : string) {
     etiquette.on('selected', () => {
-      let ratio : number = this.canvas.getObjects()[0].getScaledWidth();
+      let ratio : number = this.canvas.getObjects()[0].scaleX as number;
 
       let etiquetteJSON : Etiquette = {
-        box : [etiquette.left, etiquette.top, (etiquette.width as number * etiquette.getScaledWidth()) / ratio, (etiquette.height as number * etiquette.getScaledHeight()) / ratio],
+        box : [etiquette.left as number / ratio, etiquette.top as number / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
         text : texte,
         class : classe
       }
@@ -335,8 +337,6 @@ export class ImageComponent implements OnInit {
         this.canvas.setWidth(image.getScaledWidth() as number)
       }
     }
-
-    console.log(image)
 
   }
 
