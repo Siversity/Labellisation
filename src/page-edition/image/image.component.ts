@@ -121,12 +121,19 @@ export class ImageComponent implements OnInit {
 
     // Lorsque le clic de la souris est maintenu
     this.canvas.on('mouse:down', (o) => {
+
+      var pointer = this.canvas.getPointer(o.e);
+        origX = pointer.x;
+        origY = pointer.y;
+        var pointer = this.canvas.getPointer(o.e);
       if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
         mouseIsDown = true;
+        /*
         var pointer = this.canvas.getPointer(o.e);
         origX = pointer.x;
         origY = pointer.y;
         var pointer = this.canvas.getPointer(o.e);
+        */
 
         // Création de l'étiquette
         etiquette = this.creerEtiquette(origX, origY, pointer.x - origX, pointer.y - origY);
