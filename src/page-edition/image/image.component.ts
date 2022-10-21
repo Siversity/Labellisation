@@ -128,6 +128,8 @@ export class ImageComponent implements OnInit {
         // Création de l'étiquette
         etiquette = this.creerEtiquette(origX, origY, pointer.x - origX, pointer.y - origY);
 
+        this.recupererDonneesEtiquette({ text : "", class : "", box : [etiquette.left, etiquette.top, etiquette.width, etiquette.height] });
+
         // Sélectionner l'étiquette nouvellement créée
         this.canvas.setActiveObject(etiquette);
       }
@@ -189,10 +191,19 @@ export class ImageComponent implements OnInit {
           console.log(etiquette)
           // On ajoute l'étiquette au canvas
           this.canvas.add(etiquette);
+          etiquette.on('selected', (o) => {
+            this.recupererDonneesEtiquette(etiquetteJSON);
+          });
         })
       }).catch(function () {
         console.log("Impossible de charger les étiquettes");
       });
+  }
+
+  recupererDonneesEtiquette(etiquette : Etiquette) {
+    console.log(etiquette.box);
+    console.log(etiquette.class);
+    console.log(etiquette.text);
   }
   //#endregion
 
