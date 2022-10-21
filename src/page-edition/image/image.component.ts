@@ -25,7 +25,7 @@ export class ImageComponent implements OnInit {
   curseurSurEtiquette: boolean = false;
 
   // Données image
-  lienImage: string = 'assets/images/cutecats2.jpg';
+  lienImage: string = 'assets/images/cutecats1.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
   
 
@@ -127,6 +127,7 @@ export class ImageComponent implements OnInit {
         // Création de l'étiquette
         etiquette = this.creerEtiquette(origX, origY, pointer.x - origX, pointer.y - origY);
 
+        // Ajouter les évènements d'affichage des infos
         this.ajouterEvenementAffichageInformations(etiquette, "", "");
 
         // Sélectionner l'étiquette nouvellement créée
@@ -149,6 +150,9 @@ export class ImageComponent implements OnInit {
           etiquette.set({ width: Math.abs(origX - pointer.x) });
           etiquette.set({ height: Math.abs(origY - pointer.y) });
 
+          // Ajouter les évènements d'affichage des infos
+          this.ajouterEvenementAffichageInformations(etiquette, "", "");
+
           this.canvas.renderAll();
         }
       });
@@ -161,6 +165,14 @@ export class ImageComponent implements OnInit {
 
           // Réactiver sélection 
           this.canvas.selection = true;
+
+          // Ajouter les évènements d'affichage des infos
+          var etiquetteJSON: Etiquette = {
+            box: [origX, origY, pointer.x - origX, pointer.y - origY],
+            text: "",
+            class: ""
+          }
+          this.ajouterEvenementsEtiquettes(etiquette, etiquetteJSON);
 
           // Ajouter les évènements d'hover à l'étiquette
           etiquette.on("mouseover", (o) => {
@@ -187,8 +199,8 @@ export class ImageComponent implements OnInit {
           // Création de l'objet
           let etiquette: fabric.Rect = this.creerEtiquette(etiquetteJSON.box[0] * ratio, etiquetteJSON.box[1] * ratio, etiquetteJSON.box[2] * ratio, etiquetteJSON.box[3] * ratio);
 
-          // On ajoute l'événement de sélection de l'étiquette
-          this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
+          // Ajouter les évènements d'affichage des infos
+          this.ajouterEvenementsEtiquettes(etiquette, etiquetteJSON);
 
           // Ajouter les évènements d'hover à l'étiquette
           etiquette.on("mouseover", (o) => {
@@ -203,18 +215,33 @@ export class ImageComponent implements OnInit {
       });
   }
 
+
+  // Fonction d'ajout des évènements d'affichage des infos
+  ajouterEvenementsEtiquettes(etiquette : fabric.Rect, etiquetteJSON: Etiquette) {
+    // On ajoute l'événement de sélection de l'étiquette
+    etiquette.on('scaling', () => {
+      this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
+    })
+    etiquette.on('moving', () => {
+      this.ajouterEvenementAffichageInformations(etiquette, etiquetteJSON.text, etiquetteJSON.class);
+    })
+  }
+
+
+  // Fonction d'affichage des informations vers la SidebarDroite
   ajouterEvenementAffichageInformations(etiquette : fabric.Rect, texte : string, classe : string) {
-    etiquette.on('selected', () => {
+      // Récupération du ratio de l'image
       let ratio : number = this.canvas.getObjects()[0].scaleX as number;
 
+      // Création de l'objet Etiquette à afficher sur la SidebarDroite
       let etiquetteJSON : Etiquette = {
         box : [etiquette.left as number / ratio, etiquette.top as number / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
         text : texte,
         class : classe
       }
       
+      // Envoi de l'étiquette vers la SidebarDroite
       this.imageEnvoyerInfoVersPageEdition(etiquetteJSON);
-    })
   }
   //#endregion
 
