@@ -1,16 +1,30 @@
+<!-- Zone d'affichage des information de l'étiquette -->
 <form>
+
+    <!-- Texte de l'image -->
     <div class="row">
         <div class="col-4">
-            <label>Titre :</label>
+            <label>Text :</label>
         </div>
         <div class="col-8">
             <input type="text" class="form-control" id="labelTitle" placeholder="TODO">
         </div>
     </div>
 
+    <!-- Classe de l'image -->
     <div class="row">
         <div class="col-4">
-            <label>Position :</label>
+            <label>Class :</label>
+        </div>
+        <div class="col-8">
+            <input type="text" class="form-control" id="labelTitle" placeholder="TODO">
+        </div>
+    </div>
+
+    <!-- Coordonnées de l'étiquette -->
+    <div class="row">
+        <div class="col-4">
+            <label>Coordinates :</label>
         </div>
         <div class="col-4">
             <input type="text" class="form-control" id="labelXPos" placeholder="TODO">
@@ -22,6 +36,7 @@
         </div>
     </div>
 
+    <!-- Taille de l'étiquette -->
     <div class="row">
         <div class="col-4">
             <label>Size :</label>
@@ -37,8 +52,9 @@
     </div>
 </form>
 
+<!-- Zone d'affichage de la liste des étiquette de l'image -->
 <div class="container align-bottom">
-    <label id="labelsSelectText">Liste des étiquettes :</label>
+    <label id="labelsSelectText">Label list :</label>
     <select id="labelsSelect" class="form-select" multiple aria-label="multiple select example">
         <option selected>Open this select menu</option>
         <option value="1">One</option>
@@ -47,4 +63,5 @@
     </select>
 </div>
 
-<button class="btn btn-primary" (click)="eventSauvegarderEtiquette()">Sauvegarder</button>
+<!-- Bouton de sauvegarde -->
+<button class="btn btn-primary" (click)="eventSauvegarderEtiquette()">Save</button>
