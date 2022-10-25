@@ -1,3 +1,4 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { Etiquette } from 'src/Etiquette';
@@ -25,7 +26,7 @@ export class ImageComponent implements OnInit {
   curseurSurEtiquette: boolean = false;
 
   // Données image
-  lienImage: string = 'assets/images/cutecats3.jpg';
+  lienImage: string = 'assets/images/rainbow.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
  
 
@@ -98,8 +99,10 @@ export class ImageComponent implements OnInit {
       width: tailleX,
       height: tailleY,
       angle: 0,
-      fill: 'rgba(255,0,0,0.5)',
-      transparentCorners: false
+      fill: 'rgba(0,0,0,0)',
+      backgroundColor: 'rgba(255,0,0,0.5)',
+      opacity: 0.7,
+      transparentCorners: false,
     });
 
     // Désactivation de la possibilité de rotation de l'étiquette
@@ -125,19 +128,13 @@ export class ImageComponent implements OnInit {
 
       // Mise à jour du pointer (souris)
       var pointer = this.canvas.getPointer(o.e);
-        origX = pointer.x;
-        origY = pointer.y;
-        var pointer = this.canvas.getPointer(o.e);
+      origX = pointer.x;
+      origY = pointer.y;
+      var pointer = this.canvas.getPointer(o.e);
 
       if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
+        console.log("Bloc 1")
         mouseIsDown = true;
-
-        /*
-        var pointer = this.canvas.getPointer(o.e);
-        origX = pointer.x;
-        origY = pointer.y;
-        var pointer = this.canvas.getPointer(o.e);
-        */
 
         // Création de l'étiquette
         etiquette = this.creerEtiquette(origX, origY, pointer.x - origX, pointer.y - origY);
@@ -152,6 +149,7 @@ export class ImageComponent implements OnInit {
       // Lorsque l'on bouge la souris
       this.canvas.on('mouse:move', (o) => {
         if (this.boutonAjouterEtiquette == true) {
+          console.log("Bloc 2")
           if (!mouseIsDown) return;
           var pointer = this.canvas.getPointer(o.e);
 
@@ -175,6 +173,7 @@ export class ImageComponent implements OnInit {
       // Lorsque le clic de la souris est relevé
       this.canvas.on('mouse:up', (o) => {
         if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
+          console.log("Bloc 3")
           mouseIsDown = false;
           this.boutonAjouterEtiquette = false;
 
@@ -253,7 +252,9 @@ export class ImageComponent implements OnInit {
 
     // Création de l'objet Etiquette à afficher sur la SidebarDroite
     let etiquetteJSON: Etiquette = {
-      box: [etiquette.left as number / ratio, etiquette.top as number / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
+      //box: [etiquette.left as number / ratio, etiquette.top as number / ratio, etiquette.width as number / ratio, etiquette.height as number / ratio],
+      //@ts-ignore
+      box: [etiquette.left as number / ratio, etiquette.top as number / ratio, (etiquette.width * etiquette.scaleX) as number / ratio, (etiquette.height * etiquette.scaleY) as number / ratio],
       text: texte,
       class: classe
     }
@@ -326,20 +327,27 @@ export class ImageComponent implements OnInit {
     console.log(JSON.stringify(listeEtiquettesJSON));
   }
 
-
   // Fonction pour actualiser les étiquettes
   actualiserEtiquette(texte: string, classe: string, coordX: number, coordY: number, tailleX: number, tailleY: number) {
-    console.log(texte, classe, coordX, coordY, tailleX, tailleY)
-
+    // Récupération des données de calcul
     let etiquette: fabric.Object = this.canvas.getActiveObjects()[0];
     let ratio: number = this.canvas.getObjects()[0].scaleX as number;
 
+    // Calcul de la taille des étiquettes à afficher
     etiquette.left = coordX * ratio;
     etiquette.top = coordY * ratio;
-    etiquette.width = tailleX * ratio;
-    etiquette.height = tailleY * ratio;
-    
+    etiquette.width = (tailleX * ratio) / (etiquette.scaleX as number);
+    etiquette.height = tailleY * ratio / (etiquette.scaleY as number);
+
+    // Render des étiquettes
     this.canvas.renderAll();
+<<<<<<< HEAD
+=======
+
+    // Réinitialisation du scale des étiquettes
+    etiquette.scaleX = 1;
+    etiquette.scaleY = 1;
+>>>>>>> 481ee2f3d799bd676fdce7b9e3b2d9bed3a31c33
   }
   //#endregion
 
@@ -358,11 +366,26 @@ export class ImageComponent implements OnInit {
 
       // Responsive
       this.tailleImage(image);
-      window.addEventListener('resize', () => { this.tailleImage(image) })
+      window.addEventListener('resize', () => { this.tailleImage(image), this.tailleEtiquettes() })
 
       // Affichage de l'image
       this.canvas.add(image);
     });
+  }
+
+  // Fonction pour afficher les etiquettes de manière responsive
+  tailleEtiquettes() {
+
+    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+
+    this.canvas.getObjects().forEach((etiquette: fabric.Object) => {
+      if (etiquette.type != 'image') {
+        console.log(ratio)
+        etiquette.left = etiquette.left as number * ratio;
+        etiquette.left = etiquette.left as number * ratio;
+        // etiquette.left = etiquette.left as number * ratio;
+      }
+    })
   }
 
   // Fonction pour afficher l'image de manière responsive
