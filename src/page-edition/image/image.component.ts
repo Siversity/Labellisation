@@ -17,6 +17,7 @@ export class ImageComponent implements OnInit {
   lienImage: string = 'assets/images/cutecats2.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
+  cheminImage : any;
 
 
   // Constructeur

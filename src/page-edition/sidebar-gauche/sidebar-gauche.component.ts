@@ -31,10 +31,12 @@ export class SidebarGaucheComponent implements OnInit {
     this.sbgLancerEventAjoutEtiquetteVersPageEdition();
   }
 
+  // Event : lorsque l'on clique sur le bouton on supprime une étiquette
   eventBoutonSupprimerEtiquette() {
     this.sbgLancerEventSupprimerEtiquetteVersPageEdition();
   }
 
+  // Event : lorsque l'on clique sur le bouton on recentre l'image
   eventBoutonCentrerCamera() {
     this.sbgLancerEventCentrerCameraVersPageEdition();
   }
