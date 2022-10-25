@@ -1,0 +1,9 @@
+.header {
+    text-align: center;
+    vertical-align: baseline;
+    color: aliceblue;
+    width:auto;
+    height: 30px;
+    background: linear-gradient(to right, #f56a96, #ffa371);
+}
+
