@@ -26,7 +26,7 @@ export class ImageComponent implements OnInit {
   curseurSurEtiquette: boolean = false;
 
   // Données image
-  lienImage: string = 'assets/images/rainbow.jpg';
+  lienImage: string = 'assets/images/cutecats2.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
 
 
@@ -132,7 +132,6 @@ export class ImageComponent implements OnInit {
       var pointer = this.canvas.getPointer(o.e);
 
       if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
-        console.log("Bloc 1")
         mouseIsDown = true;
 
         // Création de l'étiquette
@@ -148,7 +147,6 @@ export class ImageComponent implements OnInit {
       // Lorsque l'on bouge la souris
       this.canvas.on('mouse:move', (o) => {
         if (this.boutonAjouterEtiquette == true) {
-          console.log("Bloc 2")
           if (!mouseIsDown) return;
           var pointer = this.canvas.getPointer(o.e);
 
@@ -172,7 +170,6 @@ export class ImageComponent implements OnInit {
       // Lorsque le clic de la souris est relevé
       this.canvas.on('mouse:up', (o) => {
         if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
-          console.log("Bloc 3")
           mouseIsDown = false;
           this.boutonAjouterEtiquette = false;
 
