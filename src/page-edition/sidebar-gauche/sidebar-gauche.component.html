@@ -1,14 +1,21 @@
 <!-- Zone d'affichage des boutons -->
-<div>
+<head>
+    <link rel="sidebar-gauche.component.css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
 
+<div class="div">
+    <br>
     <!-- Bouton d'ajout d'une étiquette -->
-    <button type="button" (click)="eventBoutonAjouterEtiquette()" class="btn btn-primary">Add</button>
+    <button type="button" (click)="eventBoutonAjouterEtiquette()" class="button"><span class="text">Ajouter une étiquette</span></button><br><br>
 
     <!-- Bouton de suppression d'une étiquette -->
-    <button type="button" (click)="eventBoutonSupprimerEtiquette()" class="btn btn-primary">Delete</button>
-
+    <button type="button" (click)="eventBoutonSupprimerEtiquette()" class="button"><span class="text">Supprimer une étiquette</span></button><br><br>
+    
     <!-- Bouton de centrage de l'image -->
-    <button type="button" (click)="eventBoutonCentrerCamera()"class="btn btn-primary">Center</button>
+    <button type="button" (click)="eventBoutonCentrerCamera()"class="button"><span class="text">Recentrer</span></button>
+    
 
 </div>
 
+</body>

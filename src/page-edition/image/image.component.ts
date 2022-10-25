@@ -28,6 +28,7 @@ export class ImageComponent implements OnInit {
   // Données image
   lienImage: string = 'assets/images/cutecats2.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
+ 
 
 
   //////////////////

@@ -50,18 +50,19 @@
             <small>height</small>
         </div>
     </div>
-</form>
+</form><br><br>
 
 <!-- Zone d'affichage de la liste des étiquette de l'image -->
 <div class="container align-bottom">
-    <label id="labelsSelectText">Label list :</label>
+    <label id="labelsSelectText" class="col-4">Label list :</label>
     <select id="labelsSelect" class="form-select" multiple aria-label="multiple select example">
         <option selected>Open this select menu</option>
         <option value="1">One</option>
         <option value="2">Two</option>
         <option value="3">Three</option>
     </select>
-</div>
+</div><br><br>
 
 <!-- Bouton de sauvegarde -->
-<button class="btn btn-primary" (click)="eventSauvegarderEtiquette()">Save</button>
+
+<button type="button" (click)="eventSauvegarderEtiquette()"class="button"><span class="text">Sauvegarder</span></button>
