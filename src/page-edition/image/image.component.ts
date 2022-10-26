@@ -341,13 +341,10 @@ export class ImageComponent implements OnInit {
 
     // Render des étiquettes
     this.canvas.renderAll();
-<<<<<<< HEAD
-=======
 
     // Réinitialisation du scale des étiquettes
     etiquette.scaleX = 1;
     etiquette.scaleY = 1;
->>>>>>> 481ee2f3d799bd676fdce7b9e3b2d9bed3a31c33
   }
   //#endregion
 

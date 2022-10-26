@@ -1,6 +1,7 @@
+<body>
 <!-- Zone d'affichage des information de l'étiquette -->
 <form>
-
+    <br>
     <!-- Texte de l'image -->
     <div class="row">
         <div class="col-4">
@@ -9,7 +10,7 @@
         <div class="col-8">
             <input type="text" name="texte" value="{{texte}}" class="form-control" id="labelTitle" placeholder="TODO">
         </div>
-    </div>
+    </div><br>
 
     <!-- Classe de l'image -->
     <div class="row">
@@ -19,7 +20,7 @@
         <div class="col-8">
             <input type="text" name="classe" value="{{classe}}" class="form-control" id="labelTitle" placeholder="TODO">
         </div>
-    </div>
+    </div><br>
 
     <!-- Coordonnées de l'étiquette -->
     <div class="row">
@@ -34,7 +35,7 @@
             <input type="number" name="coordY" value="{{coordY}}" class="form-control" id="labelYPos" placeholder="TODO" (change)="actualiserEtiquette($event)">
             <small>yPos</small>
         </div>
-    </div>
+    </div><br>
 
     <!-- Taille de l'étiquette -->
     <div class="row">
@@ -66,3 +67,5 @@
 <!-- Bouton de sauvegarde -->
 
 <button type="button" (click)="eventSauvegarderEtiquette()"class="button"><span class="text">Sauvegarder</span></button>
+
+</body>
