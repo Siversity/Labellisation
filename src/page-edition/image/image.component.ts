@@ -332,14 +332,34 @@ export class ImageComponent implements OnInit {
     }
 
     // Récupération des données de calcul
+    let img : any = this.canvas.getObjects()[0];
     let etiquette: fabric.Object = this.canvas.getActiveObjects()[0];
-    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+    let ratio: number = img.scaleX as number;
 
     // Calcul de la taille des étiquettes à afficher
     etiquette.left = coordX * ratio;
     etiquette.top = coordY * ratio;
     etiquette.width = (tailleX * ratio) / (etiquette.scaleX as number);
     etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
+
+    console.log((tailleX * (etiquette.scaleX as number)))
+
+    if ((etiquette.left) + (tailleX * (etiquette.scaleX as number)) >= img.width) {
+      console.log("1er if")
+      etiquette.left = img.width - (tailleX * (etiquette.scaleX as number));
+    }
+    if (etiquette.left as number <= 0) {
+      console.log("2ème if")
+      etiquette.left = 0;
+    }
+    if ((etiquette.top) + tailleY >= img.height) {
+      console.log("3ème if")
+      etiquette.top = (img.height) - tailleY;
+    }
+    if (etiquette.top <= 0) {
+      console.log("4ème if")
+      etiquette.top = 0;
+    }
 
     // Render des étiquettes
     this.canvas.renderAll();
