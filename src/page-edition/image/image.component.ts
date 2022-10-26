@@ -17,6 +17,8 @@ export class ImageComponent implements OnInit {
   // Fonctions appelé par parent
   //@ts-ignore
   @Input() imageEnvoyerInfoVersPageEdition: (etiquette: Etiquette) => void;
+  //@ts-ignore
+  @Input() imageEnvoyerListeEtiquettesVersPageEdition: (etiquettes: Etiquette[]) => void;
 
   // Stockage du canvas utilisé
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
@@ -141,6 +143,9 @@ export class ImageComponent implements OnInit {
         // Ajouter les évènements d'affichage des infos
         this.ajouterEvenementAffichageInformations(etiquette, "", "");
 
+        // Actualiser la liste d'étiquettes de sidebar droite
+        this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects() as any);
+
         // Sélectionner l'étiquette nouvellement créée
         this.canvas.setActiveObject(etiquette);
       }
@@ -221,6 +226,8 @@ export class ImageComponent implements OnInit {
             this.curseurSurEtiquette = false;
           })
         })
+        // Actualiser la liste d'étiquettes dans sidebar Droite
+        this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects() as any);
       }).catch(function () {
         console.log("Impossible de charger les étiquettes");
       });
@@ -259,6 +266,27 @@ export class ImageComponent implements OnInit {
     // Envoi de l'étiquette vers la SidebarDroite
     this.imageEnvoyerInfoVersPageEdition(etiquetteJSON);
   }
+
+  evenementEnvoyerListeEtiquettes(etiquettes: fabric.Rect[]) {
+    // Récupération du ratio de l'image
+    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+    let list : any = Array();
+
+
+    for (let i = 1; i < etiquettes.length; i++) {
+      let etiquetteJSON: Etiquette = {
+        //@ts-ignore
+        box: [etiquettes[i].left as number / ratio, etiquettes[i].top as number / ratio, (etiquettes[i].width * etiquettes[i].scaleX) as number / ratio, (etiquettes[i].height * etiquettes[i].scaleY) as number / ratio],
+        text: i.toString(),
+        class: i.toString()
+      }
+
+      list.push(etiquetteJSON);
+    }
+
+    // Envoi de l'étiquette vers la SidebarDroite
+    this.imageEnvoyerListeEtiquettesVersPageEdition(list);
+  }
   //#endregion
 
 
@@ -271,6 +299,7 @@ export class ImageComponent implements OnInit {
     this.canvas.getActiveObjects().forEach(etiquette => {
       this.canvas.remove(etiquette);
     })
+    this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects());
   }
 
   // Limite des étiquettes
@@ -347,17 +376,19 @@ export class ImageComponent implements OnInit {
       console.log("2ème if")
       etiquette.left = 0;
     }
-    if ((etiquette.top) + tailleY >= img.height) {
+    if ((etiquette.top) + (tailleY * (etiquette.scaleY as number)) >= img.height) {
       console.log("3ème if")
-      etiquette.top = (img.height) - tailleY;
+      etiquette.top = img.width - (tailleY * (etiquette.scaleY as number));
     }
-    if (etiquette.top <= 0) {
+    if (etiquette.top  <= 0) {
       console.log("4ème if")
       etiquette.top = 0;
     }
 
     // Render des étiquettes
     this.canvas.renderAll();
+
+    this.ajouterEvenementAffichageInformations(etiquette, texte, classe)
 
     // Réinitialisation du scale des étiquettes
     etiquette.scaleX = 1;

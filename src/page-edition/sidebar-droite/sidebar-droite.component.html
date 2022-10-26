@@ -56,10 +56,7 @@
 <div class="container align-bottom">
     <label id="labelsSelectText" class="col-4">Label list :</label>
     <select id="labelsSelect" class="form-select" multiple aria-label="multiple select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+        <option *ngFor="let etiquette of listEtiquetteActu">{{etiquette.text}}</option>
     </select>
 </div><br><br>
 
