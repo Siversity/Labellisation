@@ -11,7 +11,7 @@
     <div class="row min-vh-100">
 
         <!-- On crée la colonne de la SidebarGauche -->
-        <div class="col-2 border">
+        <div class="col-2">
             <app-sidebar-gauche 
             [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"
             [sbgLancerEventSupprimerEtiquetteVersPageEdition]="pageEditionSupprimerEtiquetteVersImage"
@@ -19,12 +19,12 @@
         </div>
 
         <!-- On crée la colonne de la zone d'affichage de l'Image -->
-        <div id="editionCol" class="col-7 border d-flex align-items-center justify-content-center">
+        <div id="editionCol" class="col-7 d-flex align-items-center justify-content-center">
             <app-image [imageEnvoyerInfoVersPageEdition]="pageEditionEnvoyerInfoVersSbd"></app-image>
         </div>
 
         <!-- On crée la colonne de la SidebarDroite-->
-        <div class="col-3 border">
+        <div class="col-3">
             <app-sidebar-droite
             [sbdLancerEventSauvegarderEtiquetteVersPageEdition]="pageEditionSauvegarderEtiquettesVersImage"
             [sbdActualiserEtiquetteVersPageEdition]="pageEditionActualiserEtiquetteVersImage"

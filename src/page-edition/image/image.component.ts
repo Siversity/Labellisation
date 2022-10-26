@@ -1,4 +1,3 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { Etiquette } from 'src/Etiquette';
@@ -26,9 +25,9 @@ export class ImageComponent implements OnInit {
   curseurSurEtiquette: boolean = false;
 
   // Données image
-  lienImage: string = 'assets/images/cutecats2.jpg';
+  lienImage: string = 'assets/images/cutecats3.jpg';
   lienJSON: string = 'assets/jsons/cutecats2.json';
- 
+
 
 
   //////////////////
@@ -326,6 +325,12 @@ export class ImageComponent implements OnInit {
 
   // Fonction pour actualiser les étiquettes
   actualiserEtiquette(texte: string, classe: string, coordX: number, coordY: number, tailleX: number, tailleY: number) {
+
+    // Si aucun objet n'est sélectionné, ne rien faire
+    if (this.canvas.getActiveObjects().length == 0) {
+      return;
+    }
+
     // Récupération des données de calcul
     let etiquette: fabric.Object = this.canvas.getActiveObjects()[0];
     let ratio: number = this.canvas.getObjects()[0].scaleX as number;
@@ -334,7 +339,7 @@ export class ImageComponent implements OnInit {
     etiquette.left = coordX * ratio;
     etiquette.top = coordY * ratio;
     etiquette.width = (tailleX * ratio) / (etiquette.scaleX as number);
-    etiquette.height = tailleY * ratio / (etiquette.scaleY as number);
+    etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
 
     // Render des étiquettes
     this.canvas.renderAll();
@@ -370,14 +375,21 @@ export class ImageComponent implements OnInit {
   // Fonction pour afficher les etiquettes de manière responsive
   tailleEtiquettes() {
 
+    // Calcul du ratio de l'image
     let ratio: number = this.canvas.getObjects()[0].scaleX as number;
 
+    // Redimensionnement pour chaque etiquette
     this.canvas.getObjects().forEach((etiquette: fabric.Object) => {
+
       if (etiquette.type != 'image') {
-        console.log(ratio)
-        etiquette.left = etiquette.left as number * ratio;
-        etiquette.left = etiquette.left as number * ratio;
-        // etiquette.left = etiquette.left as number * ratio;
+
+        // Origine
+        etiquette.top = 100 * ratio;
+        etiquette.left = 100 * ratio;
+
+        // Taille
+        etiquette.scaleToWidth(100 * ratio);
+        etiquette.scaleToHeight(100 * ratio);
       }
     })
   }
@@ -415,7 +427,6 @@ export class ImageComponent implements OnInit {
         this.canvas.setWidth(image.getScaledWidth() as number)
       }
     }
-
   }
 
   // Zoomer le canvas
