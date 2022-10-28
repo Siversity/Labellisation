@@ -1,4 +1,3 @@
-import { setUserProjection } from "ol/proj";
 import { EtiquetteJSON } from "./Etiquette";
 
 export class Association {
@@ -14,7 +13,7 @@ export class Association {
         this.json = json;
     }
 
-
+    //#region 
     // Getters
     getRect() {
         return this.rect;
@@ -23,7 +22,10 @@ export class Association {
     getJson(){
         return this.json;
     }
+    //#endregion
 
+
+    //#region 
     // Setters
     setRect(rectangle : fabric.Rect) {
         this.rect = rectangle;
@@ -35,28 +37,29 @@ export class Association {
     }
 
     setJsonBox(jsonBox : number[] ){
-        this.json = {
-            box: jsonBox,
-            text: this.json.text,
-            class: this.json.class
-        };
+        this.json.box = jsonBox;
     }
 
     setJsonText(jsonText : string ){
-        this.json = {
-            box: this.json.box,
-            text: jsonText,
-            class: this.json.class
-        };
+        this.json.text = jsonText;
     }
 
     setJsonClass(jsonClass : string ){
-        this.json = {
-            box: this.json.box,
-            text: this.json.text,
-            class: jsonClass
-        };
+        this.json.class = jsonClass;
     }
+//#endregion
 
+//#region 
+// FONCTIONS
+
+    modifierRectVersJSON(ratio : number) {
+        let x : number = this.rect.left as number / ratio;
+        let y : number = this.rect.top as number / ratio;
+        let sizeX : number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
+        let sizeY : number = (this.rect.height as number * (this.rect.scaleX as number)) / ratio;
+
+        this.setJsonBox([x, y , sizeX, sizeY]);
+    }
+//#endregion
 
 }
