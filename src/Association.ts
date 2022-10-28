@@ -1,17 +1,23 @@
-import { Etiquette } from "./Etiquette";
+import { EtiquetteJSON } from "./Etiquette";
 
 export class Association {
 
     // Attributs
     rect: fabric.Rect;
-    json: Etiquette;
+    json: EtiquetteJSON;
 
 
     // Constructeur
-    constructor(rect: fabric.Rect, json: Etiquette) {
+    constructor(rect: fabric.Rect, json: EtiquetteJSON) {
         this.rect = rect;
         this.json = json;
     }
+
+
+    // 
+
+
+
 
 
 }
