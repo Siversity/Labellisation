@@ -19,6 +19,7 @@ export class SidebarDroiteComponent implements OnInit {
   tailleY: number = -1;
   texte: string = "";
   classe: string = "";
+  listEtiquetteActu : Etiquette[] = [];
 
   // Fonction d'appel de la sauvegarde
   //@ts-ignore
@@ -61,6 +62,11 @@ export class SidebarDroiteComponent implements OnInit {
     this.tailleY = etiquette.box[3] as number;
     this.texte = etiquette.text;
     this.classe = etiquette.class;
+  }
+
+  stockerListeEtiquettes(etiquettes: Etiquette[]) {
+    this.listEtiquetteActu = etiquettes
+    console.log(etiquettes);
   }
   //#endregion
 

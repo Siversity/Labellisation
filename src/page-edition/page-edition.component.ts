@@ -82,6 +82,10 @@ export class PageEditionComponent implements OnInit {
   pageEditionEnvoyerInfoVersSbd = (etiquette : Etiquette) => {
     this.sbd.afficherInformationEtiquette(etiquette);
   }
+
+  pageEditionEnvoyerListeEtiquettesVersSbd = (etiquettes : Etiquette[]) => {
+    this.sbd.stockerListeEtiquettes(etiquettes);
+  }
   //#endregion
 
 }
