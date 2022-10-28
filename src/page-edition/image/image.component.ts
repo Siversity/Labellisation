@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { EtiquetteJSON } from 'src/Etiquette';
+import { Association } from 'src/Association';
 
 @Component({
   selector: 'app-image',
@@ -21,6 +22,7 @@ export class ImageComponent implements OnInit {
 
   // Stockage du canvas utilisé
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
+  listeEtiquettes : Association[] = [];
 
   // Gestion des évènements d'ajout
   boutonAjouterEtiquette: boolean = false;
@@ -327,29 +329,16 @@ export class ImageComponent implements OnInit {
   sauvegarderEtiquettes(): void {
     console.log("Début de la sauvegarde des étiquettes");
 
-    // On initialise une liste vide qui va contenir le JSON de chaque étiquette
-    let listeEtiquettesJSON: EtiquetteJSON[] = [];
+    let listEtiquetteJSON : EtiquetteJSON[] = [];
 
-    // On récupère le ratio de l'image
-    let ratio = this.canvas.getObjects()[0].scaleX;
-
-    // Pour chaque étiquette, on crée un JSON
-    this.canvas.getObjects().forEach((etiquette: fabric.Object) => {
-      if (etiquette.type != "image") {
-        // Création de l'étiquette
-        let etiquetteJSON: EtiquetteJSON = {
-          //@ts-ignore
-          box: [etiquette.left / ratio, etiquette.top / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
-          text: "Test",
-          class: "Test"
-        }
-
-        // On ajoute l'étiquette dans notre liste
-        listeEtiquettesJSON.push(etiquetteJSON);
-      }
+    this.listeEtiquettes.forEach((etiquette) => {
+      listEtiquetteJSON.push(etiquette.getJson());
     })
 
-    console.log(JSON.stringify(listeEtiquettesJSON));
+    console.log(listEtiquetteJSON);
+    
+    console.log("Fin de la sauvegarde des étiquettes")
+
   }
 
   // Fonction pour actualiser les étiquettes
