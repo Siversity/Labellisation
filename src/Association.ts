@@ -78,6 +78,13 @@ export class Association {
     setRectLeft(left: number) {
         this.rect.left = left;
     }
+    
+    setRectCoordAndSize(x : number, y : number, sizeX : number, sizeY : number) {
+        this.rect.left = x;
+        this.rect.top = y;
+        this.rect.width = sizeX;
+        this.rect.height = sizeY;
+    }
 
     setRectWidth(width: number) {
         this.rect.width = width;
@@ -113,9 +120,27 @@ export class Association {
         let y: number = this.rect.top as number / ratio;
         let sizeX: number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
         let sizeY: number = (this.rect.height as number * (this.rect.scaleX as number)) / ratio;
+    }
+    
+    modifierJSONFromRect(ratio : number) {
+        let x : number = this.rect.left as number / ratio;
+        let y : number = this.rect.top as number / ratio;
+        let sizeX : number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
+        let sizeY : number = (this.rect.height as number * (this.rect.scaleX as number)) / ratio;
 
         this.setJsonBox([x, y, sizeX, sizeY]);
     }
     //#endregion
+
+    modifierRectFromJSON(ratio : number) {
+        let left : number = this.json.box[0] as number * ratio;
+        let top : number = this.json.box[1] as number * ratio;
+        let width : number = (this.json.box[2] as number * ratio) / (this.rect.scaleX as number);
+        let height : number = (this.json.box[3] as number * ratio) / (this.rect.scaleY as number);
+
+        this.setRectCoordAndSize(left, top, width, height);
+    }
+
+//#endregion
 
 }
