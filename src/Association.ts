@@ -1,11 +1,13 @@
 import { fabric } from 'fabric';
 import { EtiquetteJSON } from "./Etiquette";
+import {v4 as uuidv4} from 'uuid';
 
 export class Association {
 
     // Attributs
     rect: fabric.Rect;
     json: EtiquetteJSON;
+    id : string;
 
 
     // Constructeur
@@ -50,6 +52,7 @@ export class Association {
 
         // Définition de l'attribut
         this.json = json;
+        this.id = uuidv4();
     }
 
 

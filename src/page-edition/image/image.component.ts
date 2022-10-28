@@ -83,6 +83,15 @@ export class ImageComponent implements OnInit {
     // Désactiver la sélection des autres étiquettes
     this.canvas.selection = false;
   }
+
+  getAssociationById(id : string) : Association | undefined {
+    for (let i = 0; i < this.listeEtiquettes.length; i++) {
+      if (this.listeEtiquettes[i].id == id) {
+        return this.listeEtiquettes[i]
+      }
+    }
+    return;
+  }
   //#endregion
 
 
@@ -213,6 +222,8 @@ export class ImageComponent implements OnInit {
             etiquetteJSON.box[2],
             etiquetteJSON.box[3],
           )
+
+          console.log(association.id);
 
           // Obtention des variables
           let rect: fabric.Rect = association.getRect();
@@ -346,7 +357,7 @@ export class ImageComponent implements OnInit {
   }
 
   // Fonction pour actualiser les étiquettes
-  actualiserEtiquette(texte: string, classe: string, coordX: number, coordY: number, tailleX: number, tailleY: number) {
+  actualiserEtiquette(etiquetteJSON : EtiquetteJSON, id : string) {
 
     // Si aucun objet n'est sélectionné, ne rien faire
     if (this.canvas.getActiveObjects().length == 0) {
@@ -356,37 +367,58 @@ export class ImageComponent implements OnInit {
     // Récupération des données de calcul
     let img: any = this.canvas.getObjects()[0];
     let etiquette: fabric.Object = this.canvas.getActiveObjects()[0];
+    let association : any = this.getAssociationById(id);
     let ratio: number = img.scaleX as number;
 
     // Calcul de la taille des étiquettes à afficher
-    etiquette.left = coordX * ratio;
-    etiquette.top = coordY * ratio;
-    etiquette.width = (tailleX * ratio) / (etiquette.scaleX as number);
-    etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
+    association.modifierRectFromJSON(ratio as number);
 
-    console.log((tailleX * (etiquette.scaleX as number)))
+    // etiquette.left = coordX * ratio;
+    // etiquette.top = coordY * ratio;
+    // etiquette.width = (tailleX * ratio) / (etiquette.scaleX as number);
+    // etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
 
-    if ((etiquette.left) + (tailleX * (etiquette.scaleX as number)) >= img.width) {
+    // console.log((tailleX * (etiquette.scaleX as number)))
+
+    if ((etiquette.left as number) + (association.getJson().box[2] * (etiquette.scaleX as number)) >= img.width) {
       console.log("1er if")
-      etiquette.left = img.width - (tailleX * (etiquette.scaleX as number));
+      etiquette.left = img.width - (association.getJson().box[2] * (etiquette.scaleX as number));
     }
     if (etiquette.left as number <= 0) {
       console.log("2ème if")
       etiquette.left = 0;
     }
-    if ((etiquette.top) + (tailleY * (etiquette.scaleY as number)) >= img.height) {
+    if ((etiquette.top as number) + (association.getJson().box[3] * (etiquette.scaleY as number)) >= img.height) {
       console.log("3ème if")
-      etiquette.top = img.width - (tailleY * (etiquette.scaleY as number));
+      etiquette.top = img.width - (association.getJson().box[3] * (etiquette.scaleY as number));
     }
-    if (etiquette.top <= 0) {
+    if (etiquette.top as number <= 0) {
       console.log("4ème if")
       etiquette.top = 0;
     }
 
+    // if ((etiquette.left) + (tailleX * (etiquette.scaleX as number)) >= img.width) {
+    //   console.log("1er if")
+    //   etiquette.left = img.width - (tailleX * (etiquette.scaleX as number));
+    // }
+    // if (etiquette.left as number <= 0) {
+    //   console.log("2ème if")
+    //   etiquette.left = 0;
+    // }
+    // if ((etiquette.top) + (tailleY * (etiquette.scaleY as number)) >= img.height) {
+    //   console.log("3ème if")
+    //   etiquette.top = img.width - (tailleY * (etiquette.scaleY as number));
+    // }
+    // if (etiquette.top <= 0) {
+    //   console.log("4ème if")
+    //   etiquette.top = 0;
+    // }
+
     // Render des étiquettes
     this.canvas.renderAll();
-
-    this.ajouterEvenementAffichageInformations(etiquette, texte, classe)
+    
+    // TODO
+    this.ajouterEvenementAffichageInformations(association, etiquetteJSON.text, etiquetteJSON.class)
 
     // Réinitialisation du scale des étiquettes
     etiquette.scaleX = 1;
