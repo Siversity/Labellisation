@@ -1,4 +1,4 @@
-import { Etiquette } from './../../Etiquette';
+import { EtiquetteJSON } from './../../Etiquette';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -19,7 +19,7 @@ export class SidebarDroiteComponent implements OnInit {
   tailleY: number = -1;
   texte: string = "";
   classe: string = "";
-  listEtiquetteActu : Etiquette[] = [];
+  listEtiquetteActu : EtiquetteJSON[] = [];
 
   // Fonction d'appel de la sauvegarde
   //@ts-ignore
@@ -55,7 +55,7 @@ export class SidebarDroiteComponent implements OnInit {
   }
 
   // À la sélection d'une étiquette
-  afficherInformationEtiquette(etiquette: Etiquette) {
+  afficherInformationEtiquette(etiquette: EtiquetteJSON) {
     this.coordX = etiquette.box[0] as number;
     this.coordY = etiquette.box[1] as number;
     this.tailleX = etiquette.box[2] as number;
@@ -64,7 +64,7 @@ export class SidebarDroiteComponent implements OnInit {
     this.classe = etiquette.class;
   }
 
-  stockerListeEtiquettes(etiquettes: Etiquette[]) {
+  stockerListeEtiquettes(etiquettes: EtiquetteJSON[]) {
     this.listEtiquetteActu = etiquettes
     console.log(etiquettes);
   }

@@ -1,4 +1,4 @@
-import { Etiquette } from './../Etiquette';
+import { EtiquetteJSON } from './../Etiquette';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ImageComponent } from './image/image.component';
 import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.component';
@@ -79,11 +79,11 @@ export class PageEditionComponent implements OnInit {
   // IMAGE ==> SIDEBAR DROITE //
   //////////////////////////////
   //#region
-  pageEditionEnvoyerInfoVersSbd = (etiquette : Etiquette) => {
+  pageEditionEnvoyerInfoVersSbd = (etiquette : EtiquetteJSON) => {
     this.sbd.afficherInformationEtiquette(etiquette);
   }
 
-  pageEditionEnvoyerListeEtiquettesVersSbd = (etiquettes : Etiquette[]) => {
+  pageEditionEnvoyerListeEtiquettesVersSbd = (etiquettes : EtiquetteJSON[]) => {
     this.sbd.stockerListeEtiquettes(etiquettes);
   }
   //#endregion
