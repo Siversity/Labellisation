@@ -14,8 +14,16 @@ export class Association {
     }
 
 
-    // 
+    // Getters
+    getRect() {
+        return this.rect;
+    }
 
+    // Setters
+    setRect(rectangle : fabric.Rect) {
+        this.rect = rectangle;
+    }
+    
 
 
 
