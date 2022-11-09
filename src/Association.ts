@@ -151,7 +151,7 @@ export class Association {
         let x : number = this.rect.left as number / ratio;
         let y : number = this.rect.top as number / ratio;
         let sizeX : number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
-        let sizeY : number = (this.rect.height as number * (this.rect.scaleX as number)) / ratio;
+        let sizeY : number = (this.rect.height as number * (this.rect.scaleY as number)) / ratio;
 
         this.setJsonBox([x, y, sizeX, sizeY]);
     }

@@ -369,13 +369,6 @@ export class ImageComponent implements OnInit {
     association.setJson(json);
     association.modifierRectFromJSON(image.scaleX as number);
 
-    // etiquette.left = coordX * ratio;
-    // etiquette.top = coordY * ratio;
-    // etiquette.width = (tailleX * ratio) / (etiquette.scaleX as number);
-    // etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
-
-    // console.log((tailleX * (etiquette.scaleX as number)))
-
     let imageWidth : number = image.width as  number;
     let imageHeight : number = image.height as number;
 
