@@ -368,7 +368,7 @@ export class ImageComponent implements OnInit {
     // Calcul de la taille des étiquettes à afficher
     association.setJson(json);
     association.modifierRectFromJSON(image.scaleX as number);
-
+    
     let imageWidth : number = image.width as  number;
     let imageHeight : number = image.height as number;
 
@@ -448,10 +448,14 @@ export class ImageComponent implements OnInit {
     let ratio: number = this.canvas.getObjects()[0].scaleX as number;
 
     // Redimensionnement pour chaque Etiquette
-    this.canvas.getObjects().forEach((etiquette: fabric.Object) => {
+    this.listeEtiquettes.forEach((association: Association) => {
+      // Obtention de l'objet Rect du canvas
+      let etiquette: fabric.Rect = association.getRect();
+      let json: EtiquetteJSON = association.getJson();
 
       if (etiquette.type != 'image') {
 
+        /*
         // Origine
         etiquette.top = 100 * ratio;
         etiquette.left = 100 * ratio;
@@ -459,6 +463,18 @@ export class ImageComponent implements OnInit {
         // Taille
         etiquette.scaleToWidth(100 * ratio);
         etiquette.scaleToHeight(100 * ratio);
+        */
+
+        console.log(json.box)
+
+        // Origine
+        etiquette.top = (json.box[0] as number) * ratio;
+        etiquette.left = (json.box[1] as number) * ratio;
+
+        // Taille
+        etiquette.scaleToHeight((json.box[2] as number)  * ratio);
+        //etiquette.scaleToWidth((json.box[3] as number) * ratio);
+        
       }
     })
   }
