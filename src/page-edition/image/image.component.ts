@@ -375,24 +375,40 @@ export class ImageComponent implements OnInit {
     // etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
 
     // console.log((tailleX * (etiquette.scaleX as number)))
+
+    let imageWith: number = image.width as number;
+    let imageHeight: number = image.height as number;
+
+    
+    // Tout à droite
     /*
     if ((association.getRect().left as number) + (association.getJson().box[2] * (association.getRect().scaleX as number)) >= (image.width as number)) {
       console.log("1er if")
+      console.log(imageWith)
       association.getRect().left = (image.width as number) - (association.getJson().box[2] * (association.getRect().scaleX as number));
     }
+    */
+    if ((association.getJson().box[0] + association.getJson().box[2]) > imageWith ) {
+    }
+
+    // Tout à gauche
     if (association.getRect().left as number <= 0) {
       console.log("2ème if")
       association.getRect().left = 0;
     }
+
+    // Tout en bas
     if ((association.getRect().top as number) + (association.getJson().box[3] * (association.getRect().scaleY as number)) >= (image.height as number)) {
       console.log("3ème if")
       association.getRect().top = (image.width as number)- (association.getJson().box[3] * (association.getRect().scaleY as number));
     }
+
+    // Tout en haut
     if (association.getRect().top as number <= 0) {
       console.log("4ème if")
       association.getRect().top = 0;
     }
-    */
+    
 
     // if ((etiquette.left) + (tailleX * (etiquette.scaleX as number)) >= img.width) {
     //   console.log("1er if")
@@ -451,10 +467,14 @@ export class ImageComponent implements OnInit {
     let ratio: number = this.canvas.getObjects()[0].scaleX as number;
 
     // Redimensionnement pour chaque Etiquette
-    this.canvas.getObjects().forEach((etiquette: fabric.Object) => {
+    this.listeEtiquettes.forEach((association: Association) => {
+      // Obtention de l'objet Rect du canvas
+      let etiquette: fabric.Rect = association.getRect();
+      let json: EtiquetteJSON = association.getJson();
 
       if (etiquette.type != 'image') {
 
+        /*
         // Origine
         etiquette.top = 100 * ratio;
         etiquette.left = 100 * ratio;
@@ -462,6 +482,18 @@ export class ImageComponent implements OnInit {
         // Taille
         etiquette.scaleToWidth(100 * ratio);
         etiquette.scaleToHeight(100 * ratio);
+        */
+
+        console.log(json.box)
+
+        // Origine
+        etiquette.top = (json.box[0] as number) * ratio;
+        etiquette.left = (json.box[1] as number) * ratio;
+
+        // Taille
+        etiquette.scaleToHeight((json.box[2] as number)  * ratio);
+        //etiquette.scaleToWidth((json.box[3] as number) * ratio);
+        
       }
     })
   }
