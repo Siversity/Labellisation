@@ -143,6 +143,10 @@ export class ImageComponent implements OnInit {
 
         // Sélectionner l'étiquette nouvellement créée
         this.canvas.setActiveObject(association.getRect());
+
+        association.getRect().set({
+          backgroundColor: 'rgba(0,0,0,0)',
+        })
       }
 
       // Lorsque l'on bouge la souris
@@ -179,7 +183,7 @@ export class ImageComponent implements OnInit {
         if (this.boutonAjouterEtiquette == true && this.curseurSurEtiquette == false) {
           mouseIsDown = false;
           this.boutonAjouterEtiquette = false;
-
+          
           // Réactiver sélection 
           this.canvas.selection = true;
 
@@ -376,25 +380,6 @@ export class ImageComponent implements OnInit {
 
     // console.log((tailleX * (etiquette.scaleX as number)))
 
-<<<<<<< HEAD
-    let imageWith: number = image.width as number;
-    let imageHeight: number = image.height as number;
-
-    
-    // Tout à droite
-    /*
-    if ((association.getRect().left as number) + (association.getJson().box[2] * (association.getRect().scaleX as number)) >= (image.width as number)) {
-      console.log("1er if")
-      console.log(imageWith)
-      association.getRect().left = (image.width as number) - (association.getJson().box[2] * (association.getRect().scaleX as number));
-    }
-    */
-    if ((association.getJson().box[0] + association.getJson().box[2]) > imageWith ) {
-    }
-
-    // Tout à gauche
-    if (association.getRect().left as number <= 0) {
-=======
     let imageWidth : number = image.width as  number;
     let imageHeight : number = image.height as number;
 
@@ -417,56 +402,22 @@ export class ImageComponent implements OnInit {
     }
     // Etiquette Coordonnées dépasse à gauche
     if (association.getJson().box[0] as number <= 0) {
->>>>>>> f4165c17aaec4670960968a844f8545c9fcfb703
       console.log("2ème if")
       association.setJsonBox([0, association.getJson().box[1], association.getJson().box[2], association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);
     }
-<<<<<<< HEAD
-
-    // Tout en bas
-    if ((association.getRect().top as number) + (association.getJson().box[3] * (association.getRect().scaleY as number)) >= (image.height as number)) {
-=======
     // Etiquette Coordonnées dépasse en bas
     if ((association.getJson().box[1] as number) + association.getJson().box[3]  >= (imageHeight as number)) {
->>>>>>> f4165c17aaec4670960968a844f8545c9fcfb703
       console.log("3ème if")
       association.setJsonBox([association.getJson().box[0], imageHeight - association.getJson().box[3], association.getJson().box[2], association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);  
     }
-<<<<<<< HEAD
-
-    // Tout en haut
-    if (association.getRect().top as number <= 0) {
-=======
     // Etiquette Coordonnées dépasse en haut
     if (association.getJson().box[1] as number <= 0) {
->>>>>>> f4165c17aaec4670960968a844f8545c9fcfb703
       console.log("4ème if")
       association.setJsonBox([association.getJson().box[0], 0, association.getJson().box[2], association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);
     }
-<<<<<<< HEAD
-    
-
-    // if ((etiquette.left) + (tailleX * (etiquette.scaleX as number)) >= img.width) {
-    //   console.log("1er if")
-    //   etiquette.left = img.width - (tailleX * (etiquette.scaleX as number));
-    // }
-    // if (etiquette.left as number <= 0) {
-    //   console.log("2ème if")
-    //   etiquette.left = 0;
-    // }
-    // if ((etiquette.top) + (tailleY * (etiquette.scaleY as number)) >= img.height) {
-    //   console.log("3ème if")
-    //   etiquette.top = img.width - (tailleY * (etiquette.scaleY as number));
-    // }
-    // if (etiquette.top <= 0) {
-    //   console.log("4ème if")
-    //   etiquette.top = 0;
-    // }
-=======
->>>>>>> f4165c17aaec4670960968a844f8545c9fcfb703
 
     // Render des étiquettes
     this.canvas.renderAll();
