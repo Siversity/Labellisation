@@ -8,7 +8,7 @@
             <label>Text :</label>
         </div>
         <div class="col-8">
-            <input type="text" name="texte" value="{{texte}}" class="form-control" id="labelTitle" placeholder="TODO">
+            <input type="text" name="texte" value="{{texte}}" class="form-control" id="labelTitle" placeholder="TODO" (change)="actualiserEtiquette($event)">
         </div>
     </div><br>
 
@@ -18,7 +18,7 @@
             <label>Class :</label>
         </div>
         <div class="col-8">
-            <input type="text" name="classe" value="{{classe}}" class="form-control" id="labelTitle" placeholder="TODO">
+            <input type="text" name="classe" value="{{classe}}" class="form-control" id="labelTitle" placeholder="TODO" (change)="actualiserEtiquette($event)">
         </div>
     </div><br>
 

@@ -20,6 +20,7 @@ export class SidebarDroiteComponent implements OnInit {
   texte: string = "";
   classe: string = "";
   listEtiquetteActu : EtiquetteJSON[] = [];
+  id: string = "";
 
   // Fonction d'appel de la sauvegarde
   //@ts-ignore
@@ -27,7 +28,7 @@ export class SidebarDroiteComponent implements OnInit {
 
   // Fonction d'appel de la réactualisation de l'étiquette
   //@ts-ignore
-  @Input() sbdActualiserEtiquetteVersPageEdition: (texte: string, classe: string, coordX: number, coordY: number, tailleX: number, tailleY: number) => void;
+  @Input() sbdActualiserEtiquetteVersPageEdition: (json: EtiquetteJSON, id: string) => void;
 
 
   //////////////////
@@ -55,18 +56,20 @@ export class SidebarDroiteComponent implements OnInit {
   }
 
   // À la sélection d'une étiquette
-  afficherInformationEtiquette(etiquette: EtiquetteJSON) {
+  afficherInformationEtiquette(etiquette: EtiquetteJSON, id: string) {
     this.coordX = etiquette.box[0] as number;
     this.coordY = etiquette.box[1] as number;
     this.tailleX = etiquette.box[2] as number;
     this.tailleY = etiquette.box[3] as number;
     this.texte = etiquette.text;
     this.classe = etiquette.class;
+
+    // Définition de l'id de l'étiquette affichée
+    this.id = id;
   }
 
   stockerListeEtiquettes(etiquettes: EtiquetteJSON[]) {
-    this.listEtiquetteActu = etiquettes
-    console.log(etiquettes);
+    this.listEtiquetteActu = etiquettes;
   }
   //#endregion
 
@@ -77,6 +80,7 @@ export class SidebarDroiteComponent implements OnInit {
   //#region
   actualiserEtiquette(event: Event) {
 
+    // Actualisation des données
     switch ((event.target as HTMLInputElement).name) {
       case "texte":
         this.texte = (event.target as HTMLInputElement).value;
@@ -98,8 +102,15 @@ export class SidebarDroiteComponent implements OnInit {
         break;
     }
 
+    // Création du json
+    let json: EtiquetteJSON = {
+      text: this.texte,
+      class: this.classe,
+      box: [this.coordX, this.coordY, this.tailleX, this.tailleY],
+    };
+
     // Envoi à PageEdition
-    this.sbdActualiserEtiquetteVersPageEdition(this.texte, this.classe, this.coordX, this.coordY, this.tailleX, this.tailleY);
+    this.sbdActualiserEtiquetteVersPageEdition(json, this.id);
   }
   //#endregion
 }

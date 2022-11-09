@@ -16,7 +16,7 @@ export class ImageComponent implements OnInit {
   ///////////////
   // Fonctions appelé par parent
   //@ts-ignore
-  @Input() imageEnvoyerInfoVersPageEdition: (Etiquette: Etiquette) => void;
+  @Input() imageEnvoyerInfoVersPageEdition: (Etiquette: Etiquette, id: string) => void;
   //@ts-ignore
   @Input() imageEnvoyerListeEtiquettesVersPageEdition: (Etiquettes: Etiquette[]) => void;
 
@@ -84,12 +84,14 @@ export class ImageComponent implements OnInit {
     this.canvas.selection = false;
   }
 
+  // Génération d'un ID aléatoire unique
   getAssociationById(id : string) : Association | undefined {
     for (let i = 0; i < this.listeEtiquettes.length; i++) {
       if (this.listeEtiquettes[i].id == id) {
         return this.listeEtiquettes[i]
       }
     }
+
     return;
   }
   //#endregion
@@ -136,6 +138,9 @@ export class ImageComponent implements OnInit {
         // Actualiser la liste d'étiquettes de sidebar droite
         this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects() as any);
 
+        // Ajout de l'étiquette dans la liste des étiquettes de l'image
+        this.listeEtiquettes.push(association);
+
         // Sélectionner l'étiquette nouvellement créée
         this.canvas.setActiveObject(association.getRect());
       }
@@ -161,7 +166,9 @@ export class ImageComponent implements OnInit {
           //etiquette.set({ height: Math.abs(origY - pointer.y) });
 
           // Ajouter les évènements d'affichage des infos
-          this.ajouterEvenementsEtiquettes(association);
+          association.modifierJSONFromRect(this.canvas.getObjects()[0].scaleX as number);
+          this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
+          
 
           this.canvas.renderAll();
         }
@@ -176,8 +183,10 @@ export class ImageComponent implements OnInit {
           // Réactiver sélection 
           this.canvas.selection = true;
 
+          // Modification du JSON
           association.modifierJSONFromRect(this.canvas.getObjects()[0].scaleX as number);
 
+          // Tracking de l'information
           this.ajouterEvenementsEtiquettes(association);
 
           // Ajouter les évènements d'hover à l'étiquette
@@ -213,11 +222,9 @@ export class ImageComponent implements OnInit {
             etiquetteJSON.box[3] * ratio,
           )
 
-          console.log(association.id);
-
           // Obtention des variables
           let rect: fabric.Rect = association.getRect();
-          let json: EtiquetteJSON = association.getJson();
+          this.listeEtiquettes.push(association);
 
           // Ajouter les évènements d'affichage des infos
           this.ajouterEvenementsEtiquettes(association);
@@ -229,6 +236,8 @@ export class ImageComponent implements OnInit {
           rect.on("mouseout", (o) => {
             this.curseurSurEtiquette = false;
           })
+
+          
         })
 
         // Actualiser la liste d'étiquettes dans sidebar Droite
@@ -241,15 +250,20 @@ export class ImageComponent implements OnInit {
 
   // Fonction d'ajout des évènements d'affichage des infos
   ajouterEvenementsEtiquettes(association: Association) {
+    // Ratio de l'image
+    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+
     // On ajoute l'événement de sélection de l'étiquette
     association.getRect().on('scaling', () => {
-      this.imageEnvoyerInfoVersPageEdition(association.getJson());
+      association.modifierJSONFromRect(ratio);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     })
     association.getRect().on('selected', () => {
-      this.imageEnvoyerInfoVersPageEdition(association.getJson());
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     })
     association.getRect().on('moving', () => {
-      this.imageEnvoyerInfoVersPageEdition(association.getJson());
+      association.modifierJSONFromRect(ratio);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     })
   }
 
@@ -281,9 +295,20 @@ export class ImageComponent implements OnInit {
   //#region
   // Supprimer les étiquettes sélectionnées
   supprimerEtiquette() {
-    this.canvas.getActiveObjects().forEach(etiquette => {
-      this.canvas.remove(etiquette);
+    this.canvas.getActiveObjects().forEach((rect: fabric.Rect) => {
+      // Récupération de l'association à supprimer en focntion de son fabric.Rect
+      let index: number = this.listeEtiquettes.findIndex((association: Association) => {
+        return association.getRect() == rect;
+      })
+
+      // Suppression de l'association de la liste des étiquettes
+      this.listeEtiquettes.splice(index, 1);
+
+      // Suppression du fabric.Rect du canvas
+      this.canvas.remove(rect);
     })
+    
+    // Mise à jour de la liste des étiquettes à afficher sur la SidebarDroite
     this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects());
   }
 
@@ -317,22 +342,11 @@ export class ImageComponent implements OnInit {
     // On initialise une liste vide qui va contenir le JSON de chaque étiquette
     let listeEtiquettesJSON: EtiquetteJSON[] = [];
 
-    // On récupère le ratio de l'image
-    let ratio = this.canvas.getObjects()[0].scaleX;
-
     // Pour chaque étiquette, on crée un JSON
-    this.canvas.getObjects().forEach((etiquette: fabric.Object) => {
-      if (etiquette.type != "image") {
-        // Création de l'étiquette
-        let etiquetteJSON: EtiquetteJSON = {
-          //@ts-ignore
-          box: [etiquette.left / ratio, etiquette.top / ratio, etiquette.getScaledWidth() / ratio, etiquette.getScaledHeight() / ratio],
-          text: "Test",
-          class: "Test"
-        }
-
-        // On ajoute l'étiquette dans notre liste
-        listeEtiquettesJSON.push(etiquetteJSON);
+    this.listeEtiquettes.forEach((etiquette: Association) => {
+      if (etiquette.getRect().type != "image") {
+        // On ajoute l'étiquette
+        listeEtiquettesJSON.push(etiquette.getJson())
       }
     })
 
@@ -340,7 +354,7 @@ export class ImageComponent implements OnInit {
   }
 
   // Fonction pour actualiser les étiquettes
-  actualiserEtiquette(etiquetteJSON : EtiquetteJSON, id : string) {
+  actualiserEtiquette(json : EtiquetteJSON, id : string) {
 
     // Si aucun objet n'est sélectionné, ne rien faire
     if (this.canvas.getActiveObjects().length == 0) {
@@ -348,13 +362,12 @@ export class ImageComponent implements OnInit {
     }
 
     // Récupération des données de calcul
-    let img: any = this.canvas.getObjects()[0];
-    let etiquette: fabric.Object = this.canvas.getActiveObjects()[0];
+    let image: fabric.Image = this.canvas.getObjects()[0] as fabric.Image;
     let association : any = this.getAssociationById(id);
-    let ratio: number = img.scaleX as number;
 
     // Calcul de la taille des étiquettes à afficher
-    association.modifierRectFromJSON(ratio as number);
+    association.setJson(json);
+    association.modifierRectFromJSON(image.scaleX as number);
 
     // etiquette.left = coordX * ratio;
     // etiquette.top = coordY * ratio;
@@ -362,23 +375,24 @@ export class ImageComponent implements OnInit {
     // etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
 
     // console.log((tailleX * (etiquette.scaleX as number)))
-
-    if ((etiquette.left as number) + (association.getJson().box[2] * (etiquette.scaleX as number)) >= img.width) {
+    /*
+    if ((association.getRect().left as number) + (association.getJson().box[2] * (association.getRect().scaleX as number)) >= (image.width as number)) {
       console.log("1er if")
-      etiquette.left = img.width - (association.getJson().box[2] * (etiquette.scaleX as number));
+      association.getRect().left = (image.width as number) - (association.getJson().box[2] * (association.getRect().scaleX as number));
     }
-    if (etiquette.left as number <= 0) {
+    if (association.getRect().left as number <= 0) {
       console.log("2ème if")
-      etiquette.left = 0;
+      association.getRect().left = 0;
     }
-    if ((etiquette.top as number) + (association.getJson().box[3] * (etiquette.scaleY as number)) >= img.height) {
+    if ((association.getRect().top as number) + (association.getJson().box[3] * (association.getRect().scaleY as number)) >= (image.height as number)) {
       console.log("3ème if")
-      etiquette.top = img.width - (association.getJson().box[3] * (etiquette.scaleY as number));
+      association.getRect().top = (image.width as number)- (association.getJson().box[3] * (association.getRect().scaleY as number));
     }
-    if (etiquette.top as number <= 0) {
+    if (association.getRect().top as number <= 0) {
       console.log("4ème if")
-      etiquette.top = 0;
+      association.getRect().top = 0;
     }
+    */
 
     // if ((etiquette.left) + (tailleX * (etiquette.scaleX as number)) >= img.width) {
     //   console.log("1er if")
@@ -403,8 +417,8 @@ export class ImageComponent implements OnInit {
     this.ajouterEvenementsEtiquettes(association)
 
     // Réinitialisation du scale des étiquettes
-    etiquette.scaleX = 1;
-    etiquette.scaleY = 1;
+    association.getRect().scaleX = 1;
+    association.getRect().scaleY = 1;
   }
   //#endregion
 

@@ -12,6 +12,12 @@ export class Association {
 
     // Constructeur
     constructor(canvas: fabric.Canvas, texte: string, classe: string, origX: number, origY: number, tailleX: number, tailleY: number) {
+        
+        ////////
+        // ID //
+        ////////
+        this.id = uuidv4()
+
 
         /////////////////////////////
         // Création du fabric.Rect //
@@ -26,12 +32,32 @@ export class Association {
             angle: 0,
             fill: 'rgba(0,0,0,0)',
             backgroundColor: 'rgba(255,0,0,0.5)',
+            borderColor: 'rgba(0, 0, 0, 1)',
+            hasBorders: true,
             opacity: 0.7,
             transparentCorners: false,
+            //@ts-ignore
+            id: this.id,
         });
 
         // Désactivation de la possibilité de rotation de l'étiquette
         rect.setControlsVisibility({ mtr: false });
+
+        /*
+        rect.on("selected", (o) => {
+            console.log("Selected")
+            rect.set({
+                //backgroundColor: 'rgba(155,20,70,1)',
+                backgroundColor: 'rgba(90, 34, 139)',
+            })
+        })
+        rect.on("deselected", (o) => {
+            console.log("Deselected")
+            rect.set({
+                backgroundColor: 'rgba(255,0,0,0.5)',
+            })
+        })
+        */
 
         // Ajout de l'étiquette au canvas
         canvas.add(rect);
@@ -47,17 +73,20 @@ export class Association {
         let json: EtiquetteJSON = {
             text: texte,
             class: classe,
-            box: [origX * ratio, origY * ratio, tailleX * ratio, tailleY * ratio] 
+            box: [origX / ratio, origY / ratio, tailleX / ratio, tailleY / ratio] 
         }
 
         // Définition de l'attribut
         this.json = json;
-        this.id = uuidv4();
     }
 
 
     //#region 
     // Getters
+    getId() {
+        return this.id;
+    }
+
     getRect() {
         return this.rect;
     }
@@ -117,15 +146,8 @@ export class Association {
 
     //#region 
     // FONCTIONS
-
-    modifierRectVersJSON(ratio: number) {
-        let x: number = this.rect.left as number / ratio;
-        let y: number = this.rect.top as number / ratio;
-        let sizeX: number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
-        let sizeY: number = (this.rect.height as number * (this.rect.scaleX as number)) / ratio;
-    }
     
-    modifierJSONFromRect(ratio : number) {
+    modifierJSONFromRect(ratio : number) {  
         let x : number = this.rect.left as number / ratio;
         let y : number = this.rect.top as number / ratio;
         let sizeX : number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
@@ -136,6 +158,8 @@ export class Association {
     //#endregion
 
     modifierRectFromJSON(ratio : number) {
+        console.log("test", ratio)
+        console.log(this.json.box)
         let left : number = this.json.box[0] as number * ratio;
         let top : number = this.json.box[1] as number * ratio;
         let width : number = (this.json.box[2] as number * ratio) / (this.rect.scaleX as number);

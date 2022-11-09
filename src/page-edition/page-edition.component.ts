@@ -79,8 +79,8 @@ export class PageEditionComponent implements OnInit {
   // IMAGE ==> SIDEBAR DROITE //
   //////////////////////////////
   //#region
-  pageEditionEnvoyerInfoVersSbd = (etiquette : EtiquetteJSON) => {
-    this.sbd.afficherInformationEtiquette(etiquette);
+  pageEditionEnvoyerInfoVersSbd = (etiquette : EtiquetteJSON, id: string) => {
+    this.sbd.afficherInformationEtiquette(etiquette, id);
   }
 
   pageEditionEnvoyerListeEtiquettesVersSbd = (etiquettes : EtiquetteJSON[]) => {
