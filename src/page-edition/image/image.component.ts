@@ -375,41 +375,45 @@ export class ImageComponent implements OnInit {
     // etiquette.height = (tailleY * ratio) / (etiquette.scaleY as number);
 
     // console.log((tailleX * (etiquette.scaleX as number)))
-    /*
-    if ((association.getRect().left as number) + (association.getJson().box[2] * (association.getRect().scaleX as number)) >= (image.width as number)) {
-      console.log("1er if")
-      association.getRect().left = (image.width as number) - (association.getJson().box[2] * (association.getRect().scaleX as number));
-    }
-    if (association.getRect().left as number <= 0) {
-      console.log("2ème if")
-      association.getRect().left = 0;
-    }
-    if ((association.getRect().top as number) + (association.getJson().box[3] * (association.getRect().scaleY as number)) >= (image.height as number)) {
-      console.log("3ème if")
-      association.getRect().top = (image.width as number)- (association.getJson().box[3] * (association.getRect().scaleY as number));
-    }
-    if (association.getRect().top as number <= 0) {
-      console.log("4ème if")
-      association.getRect().top = 0;
-    }
-    */
 
-    // if ((etiquette.left) + (tailleX * (etiquette.scaleX as number)) >= img.width) {
-    //   console.log("1er if")
-    //   etiquette.left = img.width - (tailleX * (etiquette.scaleX as number));
-    // }
-    // if (etiquette.left as number <= 0) {
-    //   console.log("2ème if")
-    //   etiquette.left = 0;
-    // }
-    // if ((etiquette.top) + (tailleY * (etiquette.scaleY as number)) >= img.height) {
-    //   console.log("3ème if")
-    //   etiquette.top = img.width - (tailleY * (etiquette.scaleY as number));
-    // }
-    // if (etiquette.top <= 0) {
-    //   console.log("4ème if")
-    //   etiquette.top = 0;
-    // }
+    let imageWidth : number = image.width as  number;
+    let imageHeight : number = image.height as number;
+
+    // Etiquette Size dépasse à droite
+    if ((association.getJson().box[2] as number) >= (imageWidth)) {
+      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], imageWidth, association.getJson().box[3]])
+      association.modifierRectFromJSON(image.scaleX);
+    }
+    // Etiquette Size dépasse en bas
+    if ((association.getJson().box[3] as number) >= (imageHeight)) {
+      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], association.getJson().box[2], imageHeight])
+      association.modifierRectFromJSON(image.scaleX);
+    }
+
+    // Etiquette Coordonnées dépasse à droite
+    if ((association.getJson().box[0] as number) + association.getJson().box[2]  >= (imageWidth as number)) {
+      console.log("1er if")
+      association.setJsonBox([imageWidth - association.getJson().box[2], association.getJson().box[1], association.getJson().box[2], association.getJson().box[3]])
+      association.modifierRectFromJSON(image.scaleX);
+    }
+    // Etiquette Coordonnées dépasse à gauche
+    if (association.getJson().box[0] as number <= 0) {
+      console.log("2ème if")
+      association.setJsonBox([0, association.getJson().box[1], association.getJson().box[2], association.getJson().box[3]])
+      association.modifierRectFromJSON(image.scaleX);
+    }
+    // Etiquette Coordonnées dépasse en bas
+    if ((association.getJson().box[1] as number) + association.getJson().box[3]  >= (imageHeight as number)) {
+      console.log("3ème if")
+      association.setJsonBox([association.getJson().box[0], imageHeight - association.getJson().box[3], association.getJson().box[2], association.getJson().box[3]])
+      association.modifierRectFromJSON(image.scaleX);  
+    }
+    // Etiquette Coordonnées dépasse en haut
+    if (association.getJson().box[1] as number <= 0) {
+      console.log("4ème if")
+      association.setJsonBox([association.getJson().box[0], 0, association.getJson().box[2], association.getJson().box[3]])
+      association.modifierRectFromJSON(image.scaleX);
+    }
 
     // Render des étiquettes
     this.canvas.renderAll();
