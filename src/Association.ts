@@ -41,11 +41,14 @@ export class Association {
             id: this.id,
         });
 
+        rect.on("selected", (o) => {
+            console.log(rect.width)
+        })
+
         // Désactivation de la possibilité de rotation de l'étiquette
         rect.setControlsVisibility({ mtr: false });
             
             rect.on("mousedown", (o) => {
-                console.log("MouseDown")
                 rect.set({
                     backgroundColor: 'rgba(0, 0, 0, 0)',
                 })
@@ -53,7 +56,6 @@ export class Association {
             })
             
             rect.on("mouseup", (o) => {
-                console.log("MouseUp")
                 rect.set({
                     backgroundColor: 'rgba(255,0,0,0.5)',
                 })
@@ -119,6 +121,8 @@ export class Association {
         this.rect.top = y;
         this.rect.width = sizeX;
         this.rect.height = sizeY;
+
+        this.rect.setCoords();
     }
 
     setRectWidth(width: number) {
@@ -161,14 +165,15 @@ export class Association {
     //#endregion
 
     modifierRectFromJSON(ratio: number) {
-        console.log("test", ratio)
-        console.log(this.json.box)
         let left: number = this.json.box[0] as number * ratio;
         let top: number = this.json.box[1] as number * ratio;
         let width: number = (this.json.box[2] as number * ratio) / (this.rect.scaleX as number);
         let height: number = (this.json.box[3] as number * ratio) / (this.rect.scaleY as number);
 
+        console.log("1", width)
+
         this.setRectCoordAndSize(left, top, width, height);
+
     }
 
     //#endregion

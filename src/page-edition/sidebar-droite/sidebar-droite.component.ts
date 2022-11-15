@@ -109,6 +109,8 @@ export class SidebarDroiteComponent implements OnInit {
       box: [this.coordX, this.coordY, this.tailleX, this.tailleY],
     };
 
+    console.log(this.tailleX)
+
     // Envoi à PageEdition
     this.sbdActualiserEtiquetteVersPageEdition(json, this.id);
   }
