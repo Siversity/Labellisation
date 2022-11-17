@@ -57,7 +57,7 @@
 <div class="container align-bottom">
     <label id="labelsSelectText" class="col-4">Label list :</label>
     <select id="labelsSelect" class="form-select" multiple aria-label="multiple select example">
-        <option *ngFor="let etiquette of listEtiquetteActu">{{etiquette.text}}</option>
+        <option *ngFor="let association of listAssociationActu" (click)="selectionnerEtiquette(association)">{{association.getJson().class}}</option>
     </select>
 </div><br><br>
 

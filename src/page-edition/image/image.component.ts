@@ -18,7 +18,7 @@ export class ImageComponent implements OnInit {
   //@ts-ignore
   @Input() imageEnvoyerInfoVersPageEdition: (Etiquette: Etiquette, id: string) => void;
   //@ts-ignore
-  @Input() imageEnvoyerListeEtiquettesVersPageEdition: (Etiquettes: Etiquette[]) => void;
+  @Input() imageEnvoyerListeEtiquettesVersPageEdition: (Etiquette: Association[]) => void;
 
   // Stockage du canvas utilisé
   canvas: fabric.Canvas = new fabric.Canvas("canvas", {});
@@ -141,9 +141,6 @@ export class ImageComponent implements OnInit {
         // Ajouter les évènements d'affichage des infos
         //this.ajouterEvenementsEtiquettes(association);
 
-        // Actualiser la liste d'étiquettes de sidebar droite
-        this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects() as any);
-
         // Ajout de l'étiquette dans la liste des étiquettes de l'image
         this.listeEtiquettes.push(association);
 
@@ -199,6 +196,9 @@ export class ImageComponent implements OnInit {
           // Tracking de l'information
           this.ajouterEvenementsEtiquettes(association);
 
+          // Actualiser la liste d'étiquettes de sidebar droite
+          this.evenementEnvoyerListeEtiquettes(this.listeEtiquettes);
+
           // Ajouter les évènements d'hover à l'étiquette
           association.getRect().on("mouseover", (o) => {
             this.curseurSurEtiquette = true;
@@ -206,8 +206,8 @@ export class ImageComponent implements OnInit {
           association.getRect().on("mouseout", (o) => {
             this.curseurSurEtiquette = false;
           })
+          this.actualiserEtiquette(association.getJson(), association.getId())
         }
-        // this.actualiserEtiquette(association.getJson(), association.getId())
       });
     });
   }
@@ -251,7 +251,7 @@ export class ImageComponent implements OnInit {
         })
 
         // Actualiser la liste d'étiquettes dans sidebar Droite
-        this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects() as any);
+        this.evenementEnvoyerListeEtiquettes(this.listeEtiquettes);
 
       }).catch(function () {
         console.log("Impossible de charger les étiquettes");
@@ -277,24 +277,9 @@ export class ImageComponent implements OnInit {
     })
   }
 
-  evenementEnvoyerListeEtiquettes(etiquette: fabric.Rect[]) {
-    // Récupération du ratio de l'image
-    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
-    let list: any = Array();
-
-    for (let i = 1; i < etiquette.length; i++) {
-      let etiquetteJSON: EtiquetteJSON = {
-        //@ts-ignore
-        box: [etiquette[i].left as number / ratio, etiquette[i].top as number / ratio, (etiquette[i].width * etiquette[i].scaleX) as number / ratio, (etiquette[i].height * etiquette[i].scaleY) as number / ratio],
-        text: i.toString(),
-        class: i.toString()
-      }
-
-      list.push(etiquetteJSON);
-    }
-
+  evenementEnvoyerListeEtiquettes(associations : Association[]) {
     // Envoi de l'étiquette vers la SidebarDroite
-    this.imageEnvoyerListeEtiquettesVersPageEdition(list);
+    this.imageEnvoyerListeEtiquettesVersPageEdition(associations);
   }
   //#endregion
 
@@ -319,7 +304,7 @@ export class ImageComponent implements OnInit {
     })
 
     // Mise à jour de la liste des étiquettes à afficher sur la SidebarDroite
-    this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects());
+    // this.evenementEnvoyerListeEtiquettes(this.canvas.getObjects());
   }
 
   // Limite des étiquettes
@@ -445,6 +430,13 @@ export class ImageComponent implements OnInit {
 
     
     
+  }
+
+  selectionnerEtiquette(association : Association) {
+    console.log(association.getRect())
+    // this.canvas.discardActiveObject().renderAll();
+    this.canvas.setActiveObject(association.getRect());
+    this.canvas.renderAll()
   }
   //#endregion
 

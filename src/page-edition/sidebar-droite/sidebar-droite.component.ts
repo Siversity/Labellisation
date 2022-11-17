@@ -1,5 +1,6 @@
 import { EtiquetteJSON } from './../../Etiquette';
 import { Component, Input, OnInit } from '@angular/core';
+import { Association } from 'src/Association';
 
 @Component({
   selector: 'app-sidebar-droite',
@@ -19,7 +20,7 @@ export class SidebarDroiteComponent implements OnInit {
   tailleY: number = -1;
   texte: string = "";
   classe: string = "";
-  listEtiquetteActu : EtiquetteJSON[] = [];
+  listAssociationActu : Association[] = [];
   id: string = "";
 
   // Fonction d'appel de la sauvegarde
@@ -29,6 +30,10 @@ export class SidebarDroiteComponent implements OnInit {
   // Fonction d'appel de la réactualisation de l'étiquette
   //@ts-ignore
   @Input() sbdActualiserEtiquetteVersPageEdition: (json: EtiquetteJSON, id: string) => void;
+
+  // Fonction de sélection d'étiquette
+  //@ts-ignore
+  @Input() sbdSelectionnerEtiquetteVersPageEdition: (association : Association) => void; 
 
 
   //////////////////
@@ -68,8 +73,9 @@ export class SidebarDroiteComponent implements OnInit {
     this.id = id;
   }
 
-  stockerListeEtiquettes(etiquettes: EtiquetteJSON[]) {
-    this.listEtiquetteActu = etiquettes;
+  stockerListeEtiquettes(associations: Association[]) {
+    this.listAssociationActu = associations;
+    console.log(this.listAssociationActu)
   }
   //#endregion
 
@@ -113,6 +119,10 @@ export class SidebarDroiteComponent implements OnInit {
 
     // Envoi à PageEdition
     this.sbdActualiserEtiquetteVersPageEdition(json, this.id);
+  }
+
+  selectionnerEtiquette(association : Association) {
+    this.sbdSelectionnerEtiquetteVersPageEdition(association);
   }
   //#endregion
 }

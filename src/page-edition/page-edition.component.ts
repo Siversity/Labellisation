@@ -1,3 +1,4 @@
+import { Association } from './../Association';
 import { EtiquetteJSON } from './../Etiquette';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ImageComponent } from './image/image.component';
@@ -72,6 +73,10 @@ export class PageEditionComponent implements OnInit {
   pageEditionActualiserEtiquetteVersImage = (etiquetteJSON : EtiquetteJSON, id : string) => {
     this.image.actualiserEtiquette(etiquetteJSON, id);
   }
+
+  pageEditionSelectionnerEtiquetteVersImage = (association : Association) => {
+    this.image.selectionnerEtiquette(association);
+  }
   //#endregion
 
 
@@ -83,8 +88,8 @@ export class PageEditionComponent implements OnInit {
     this.sbd.afficherInformationEtiquette(etiquette, id);
   }
 
-  pageEditionEnvoyerListeEtiquettesVersSbd = (etiquettes : EtiquetteJSON[]) => {
-    this.sbd.stockerListeEtiquettes(etiquettes);
+  pageEditionEnvoyerListeEtiquettesVersSbd = (associations : Association[]) => {
+    this.sbd.stockerListeEtiquettes(associations);
   }
   //#endregion
 
