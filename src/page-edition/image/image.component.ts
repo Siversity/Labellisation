@@ -162,11 +162,11 @@ export class ImageComponent implements OnInit {
           var pointer = this.canvas.getPointer(o.e);
 
           if (origX > pointer.x) {
-            association.setRectLeft(Math.abs(pointer.x))
+            association.setRectLeft(pointer.x)
             //etiquette.set({ left: Math.abs(pointer.x) });
           }
           if (origY > pointer.y) {
-            association.setRectTop(Math.abs(pointer.y))
+            association.setRectTop(pointer.y)
             //etiquette.set({ top: Math.abs(pointer.y) });
           }
 
@@ -207,6 +207,7 @@ export class ImageComponent implements OnInit {
             this.curseurSurEtiquette = false;
           })
         }
+        // this.actualiserEtiquette(association.getJson(), association.getId())
       });
     });
   }
