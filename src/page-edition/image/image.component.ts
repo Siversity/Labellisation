@@ -272,6 +272,7 @@ export class ImageComponent implements OnInit {
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     })
     association.getRect().on('moving', () => {
+      console.log("Moving", (association.getRect().width as number * (association.getRect().scaleX as number)) / ratio);
       association.modifierJSONFromRect(ratio);
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     })
@@ -379,7 +380,6 @@ export class ImageComponent implements OnInit {
 
     // Calcul de la taille des étiquettes à afficher
     association.setJson(json);
-    console.log(association.getRect().width)
     association.modifierRectFromJSON(image.scaleX as number);
 
     
@@ -425,25 +425,14 @@ export class ImageComponent implements OnInit {
       association.modifierRectFromJSON(image.scaleX);
     }
     
-
     /*
     // Réinitialisation du scale des étiquettes
     association.getRect().scaleX = 1;
     association.getRect().scaleY = 1;
     */
-    
-
-    console.log(association.getRect())
-
 
     // Render des étiquettes
     this.canvas.renderAll();
-
-    
-
-    //this.ajouterEvenementsEtiquettes(association)
-
-    
     
   }
   //#endregion
@@ -463,7 +452,7 @@ export class ImageComponent implements OnInit {
 
       // Responsive
       this.tailleImage(image);
-      window.addEventListener('resize', () => { this.tailleImage(image), this.tailleEtiquettes() })
+      window.addEventListener('resize', () => { this.tailleImage(image), /*this.tailleEtiquettes()*/ location.reload() })
 
       // Affichage de l'image
       this.canvas.add(image);
@@ -500,6 +489,22 @@ export class ImageComponent implements OnInit {
 
         // Taille
         etiquette.scaleToHeight((json.box[2] as number) * ratio);
+
+        
+        etiquette.scaleX = 1;
+        etiquette.scaleY = 1;
+        
+        
+        //association.modifierRectFromJSON(ratio);
+        
+
+        console.log("Resize", (etiquette.width as number * (etiquette.scaleX as number)) / ratio);
+
+
+        //console.log(association.getJson().box[2])
+
+        
+
         //etiquette.scaleToWidth((json.box[3] as number) * ratio);
 
       }

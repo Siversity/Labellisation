@@ -1,7 +1,6 @@
 import { fabric } from 'fabric';
 import { EtiquetteJSON } from "./Etiquette";
 import { v4 as uuidv4 } from 'uuid';
-import { delay } from 'rxjs';
 
 export class Association {
 
@@ -41,9 +40,7 @@ export class Association {
             id: this.id,
         });
 
-        rect.on("selected", (o) => {
-            console.log(rect.width)
-        })
+        
 
         // Désactivation de la possibilité de rotation de l'étiquette
         rect.setControlsVisibility({ mtr: false });
@@ -83,6 +80,11 @@ export class Association {
 
         // Définition de l'attribut
         this.json = json;
+
+        rect.on("selected", (o) => {
+            console.log("Selected", (rect.width as number * (rect.scaleX as number)) / ratio);
+        })
+
     }
 
 
@@ -160,17 +162,21 @@ export class Association {
         let sizeX: number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
         let sizeY: number = (this.rect.height as number * (this.rect.scaleY as number)) / ratio;
 
+        console.log("Modifier", sizeX)
+
         this.setJsonBox([x, y, sizeX, sizeY]);
     }
     //#endregion
 
     modifierRectFromJSON(ratio: number) {
+        console.log("Modifier", (this.rect.width as number * (this.rect.scaleX as number)) / ratio);
+
         let left: number = this.json.box[0] as number * ratio;
         let top: number = this.json.box[1] as number * ratio;
         let width: number = (this.json.box[2] as number * ratio) / (this.rect.scaleX as number);
         let height: number = (this.json.box[3] as number * ratio) / (this.rect.scaleY as number);
 
-        console.log("1", width)
+        console.log("Modifier Bis",  (width * (this.rect.scaleX as number)) / ratio)
 
         this.setRectCoordAndSize(left, top, width, height);
 
