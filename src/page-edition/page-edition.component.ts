@@ -77,6 +77,10 @@ export class PageEditionComponent implements OnInit {
   pageEditionSelectionnerEtiquetteVersImage = (association : Association) => {
     this.image.selectionnerEtiquette(association);
   }
+
+  pageEditionRenderAllVersImage = () => {
+    this.image.canvas.renderAll();
+  }
   //#endregion
 
 

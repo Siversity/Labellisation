@@ -8,7 +8,7 @@
             <label>Text :</label>
         </div>
         <div class="col-8">
-            <input type="text" name="texte" value="{{texte}}" class="form-control" id="labelTitle" placeholder="TODO" (change)="actualiserEtiquette($event)">
+            <input type="text" name="texte" value="{{texte}}" class="form-control" id="labelTitle" placeholder="TODO" (input)="actualiserEtiquette($event)" autocomplete="off">
         </div>
     </div><br>
 
@@ -18,7 +18,7 @@
             <label>Class :</label>
         </div>
         <div class="col-8">
-            <input type="text" name="classe" value="{{classe}}" class="form-control" id="labelTitle" placeholder="TODO" (change)="actualiserEtiquette($event)">
+            <input type="text" name="classe" value="{{classe}}" class="form-control" id="labelTitle" placeholder="TODO" (input)="actualiserEtiquette($event)">
         </div>
     </div><br>
 
@@ -57,7 +57,7 @@
 <div class="container align-bottom">
     <label id="labelsSelectText" class="col-4">Label list :</label>
     <select id="labelsSelect" class="form-select" multiple aria-label="multiple select example">
-        <option *ngFor="let association of listAssociationActu" (click)="selectionnerEtiquette(association)">{{association.getJson().class}}</option>
+        <option *ngFor="let association of listAssociationActu" (mouseover)="animationEntrerEtiquette(association)" (mouseout)="animationSortirEtiquette(association)" (click)="selectionnerEtiquette(association)">[{{association.getJson().class}}] : {{association.getJson().text}}</option>
     </select>
 </div><br><br>
 
