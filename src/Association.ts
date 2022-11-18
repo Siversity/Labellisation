@@ -81,10 +81,6 @@ export class Association {
         // Définition de l'attribut
         this.json = json;
 
-        rect.on("selected", (o) => {
-            console.log("Selected", (rect.width as number * (rect.scaleX as number)) / ratio);
-        })
-
     }
 
 

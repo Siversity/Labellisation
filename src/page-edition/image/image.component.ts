@@ -206,6 +206,8 @@ export class ImageComponent implements OnInit {
           association.getRect().on("mouseout", (o) => {
             this.curseurSurEtiquette = false;
           })
+
+          // Limiter étiquette
           this.actualiserEtiquette(association.getJson(), association.getId())
         }
       });
@@ -278,7 +280,7 @@ export class ImageComponent implements OnInit {
     })
   }
 
-  evenementEnvoyerListeEtiquettes(associations : Association[]) {
+  evenementEnvoyerListeEtiquettes(associations: Association[]) {
     // Envoi de l'étiquette vers la SidebarDroite
     this.imageEnvoyerListeEtiquettesVersPageEdition(associations);
   }
@@ -367,49 +369,58 @@ export class ImageComponent implements OnInit {
     association.setJson(json);
     association.modifierRectFromJSON(image.scaleX as number);
 
-    
+
     let imageHeight: number = image.height as number;
     let imageWidth: number = image.width as number;
 
 
+    // Etiquette size : taille des étiquette
+    // Etiquette coordonnées : coordonnées X,Y
 
-    
     // Etiquette Size dépasse à droite
     if ((association.getJson().box[2] as number) >= (imageWidth)) {
       association.setJsonBox([association.getJson().box[0], association.getJson().box[1], imageWidth, association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
     // Etiquette Size dépasse en bas
     if ((association.getJson().box[3] as number) >= (imageHeight)) {
       association.setJsonBox([association.getJson().box[0], association.getJson().box[1], association.getJson().box[2], imageHeight])
       association.modifierRectFromJSON(image.scaleX);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
 
     // Etiquette Coordonnées dépasse à droite
-    if ((association.getJson().box[0] as number) + association.getJson().box[2]  >= (imageWidth as number)) {
+    if ((association.getJson().box[0] as number) + association.getJson().box[2] >= (imageWidth as number)) {
       console.log("1er if")
-      association.setJsonBox([imageWidth - association.getJson().box[2], association.getJson().box[1], association.getJson().box[2], association.getJson().box[3]])
+      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], imageWidth - association.getJson().box[0], association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
+
     // Etiquette Coordonnées dépasse à gauche
     if (association.getJson().box[0] as number <= 0) {
       console.log("2ème if")
-      association.setJsonBox([0, association.getJson().box[1], association.getJson().box[2], association.getJson().box[3]])
+      association.setJsonBox([0, association.getJson().box[1], association.getJson().box[2] - Math.abs(association.getJson().box[0]), association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);
+      this.ajouterEvenementsEtiquettes(association)
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
     // Etiquette Coordonnées dépasse en bas
-    if ((association.getJson().box[1] as number) + association.getJson().box[3]  >= (imageHeight as number)) {
+    if ((association.getJson().box[1] as number) + association.getJson().box[3] >= (imageHeight as number)) {
       console.log("3ème if")
-      association.setJsonBox([association.getJson().box[0], imageHeight - association.getJson().box[3], association.getJson().box[2], association.getJson().box[3]])
-      association.modifierRectFromJSON(image.scaleX);  
+      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], association.getJson().box[2], imageHeight - association.getJson().box[1]])
+      association.modifierRectFromJSON(image.scaleX);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
     // Etiquette Coordonnées dépasse en haut
     if (association.getJson().box[1] as number <= 0) {
       console.log("4ème if")
-      association.setJsonBox([association.getJson().box[0], 0, association.getJson().box[2], association.getJson().box[3]])
+      association.setJsonBox([association.getJson().box[0], 0, association.getJson().box[2], association.getJson().box[3] - Math.abs(association.getJson().box[1])])
       association.modifierRectFromJSON(image.scaleX);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
-    
+
     /*
     // Réinitialisation du scale des étiquettes
     association.getRect().scaleX = 1;
@@ -418,10 +429,10 @@ export class ImageComponent implements OnInit {
 
     // Render des étiquettes
     this.canvas.renderAll();
-    
+
   }
 
-  selectionnerEtiquette(association : Association) {
+  selectionnerEtiquette(association: Association) {
     console.log(association.getRect())
     // this.canvas.discardActiveObject().renderAll();
     this.canvas.setActiveObject(association.getRect());
@@ -482,20 +493,20 @@ export class ImageComponent implements OnInit {
         // Taille
         etiquette.scaleToHeight((json.box[2] as number) * ratio);
 
-        
+
         etiquette.scaleX = 1;
         etiquette.scaleY = 1;
-        
-        
+
+
         //association.modifierRectFromJSON(ratio);
-        
+
 
         console.log("Resize", (etiquette.width as number * (etiquette.scaleX as number)) / ratio);
 
 
         //console.log(association.getJson().box[2])
 
-        
+
 
         //etiquette.scaleToWidth((json.box[3] as number) * ratio);
 

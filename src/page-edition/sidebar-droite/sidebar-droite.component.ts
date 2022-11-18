@@ -35,6 +35,10 @@ export class SidebarDroiteComponent implements OnInit {
   //@ts-ignore
   @Input() sbdSelectionnerEtiquetteVersPageEdition: (association : Association) => void; 
 
+  // Fonction de trigger de render du canvas
+  //@ts-ignore
+  @Input() sbdRenderAllVersPageEdition: () => void;
+
 
   //////////////////
   // CONSTRUCTEUR //
@@ -121,8 +125,22 @@ export class SidebarDroiteComponent implements OnInit {
     this.sbdActualiserEtiquetteVersPageEdition(json, this.id);
   }
 
-  selectionnerEtiquette(association : Association) {
+  selectionnerEtiquette(association: Association) {
     this.sbdSelectionnerEtiquetteVersPageEdition(association);
+  }
+
+  animationEntrerEtiquette(association: Association) {
+    association.getRect().set({
+      backgroundColor: 'rgba(250,250,250,1)',
+    })
+    this.sbdRenderAllVersPageEdition();
+  }
+
+  animationSortirEtiquette(association: Association) {
+    association.getRect().set({
+      backgroundColor: 'rgba(255,0,0,0.5)',
+    })
+    this.sbdRenderAllVersPageEdition();
   }
   //#endregion
 }
