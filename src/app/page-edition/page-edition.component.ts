@@ -1,8 +1,9 @@
-import { Association } from './../Association';
-import { EtiquetteJSON } from './../Etiquette';
+import { Association } from '../../Association';
+import { EtiquetteJSON } from '../../Etiquette';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ImageComponent } from './image/image.component';
 import { SidebarDroiteComponent } from './sidebar-droite/sidebar-droite.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-page-edition',
@@ -14,6 +15,7 @@ export class PageEditionComponent implements OnInit {
   ///////////////
   // VARIABLES //
   ///////////////
+  nomImage: string = "";
 
   // Composant Image
   //@ts-ignore
@@ -27,7 +29,7 @@ export class PageEditionComponent implements OnInit {
   //////////////////
   // CONSTRUCTEUR //
   //////////////////
-  constructor() { }
+  constructor(private _Activatedroute:ActivatedRoute) { }
 
 
   /////////////////////////
@@ -36,6 +38,8 @@ export class PageEditionComponent implements OnInit {
   //#region
   // A l'initialisation
   ngOnInit(): void {
+    console.log(this._Activatedroute.snapshot.paramMap.get("nomImage"));
+    this.nomImage = this._Activatedroute.snapshot.paramMap.get("nomImage") as string;
   }
   //#endregion
 

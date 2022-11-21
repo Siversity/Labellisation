@@ -1,4 +1,4 @@
-import { EtiquetteJSON } from './../../Etiquette';
+import { EtiquetteJSON } from '../../../Etiquette';
 import { Component, Input, OnInit } from '@angular/core';
 import { Association } from 'src/Association';
 

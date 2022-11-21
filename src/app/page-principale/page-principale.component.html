@@ -1,0 +1,14 @@
+<router-outlet>
+
+<!-- On crée une DIV ayant pour taille toute la taille de l'écran -->
+<div id="principale" class="container-fluid text-center min-vh-100 min-vm-100">
+
+    <div class="list-group">
+        <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+          The current button
+        </button>
+
+        <a *ngFor="let image of listeImages" class="list-group-item list-group-item-action" [routerLink]="['/edition', image]" routerLinkActive="active" ariaCurrentWhenActive="page">{{image}}</a>
+      </div>
+
+</div>

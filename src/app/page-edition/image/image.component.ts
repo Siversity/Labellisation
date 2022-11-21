@@ -30,7 +30,7 @@ export class ImageComponent implements OnInit {
   curseurSurEtiquette: boolean = false;
 
   // Données image
-  nomImage: string = "cutecats3.jpg";
+  @Input() nomImage: string = "";
   lienImage: any = "";
   lienJSON: string = 'assets/jsons/cutecats2.json';
 
