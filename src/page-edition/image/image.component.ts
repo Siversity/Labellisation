@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
+import { getImage } from 'src/api/getImage';
 import { Association } from 'src/Association';
 import { EtiquetteJSON } from 'src/Etiquette';
 
@@ -29,14 +30,16 @@ export class ImageComponent implements OnInit {
   curseurSurEtiquette: boolean = false;
 
   // Données image
-  lienImage: string = 'assets/images/cutecats3.jpg';
+  nomImage: string = "cutecats3.jpg";
+  lienImage: any = "";
   lienJSON: string = 'assets/jsons/cutecats2.json';
 
 
   //////////////////
   // CONSTRUCTEUR //
   //////////////////
-  constructor() { }
+  constructor() {
+  }
 
 
   /////////////////////////
@@ -44,7 +47,11 @@ export class ImageComponent implements OnInit {
   /////////////////////////
   //#region
   // A l'initialisation du composant
-  ngOnInit(): void {
+  ngOnInit() {
+
+    // Lien de l'image
+    this.lienImage = "http://localhost:4300/getImage?nomImage=" + this.nomImage;
+
     // Création d'un canvas vide
     this.canvas = new fabric.Canvas("canvas", {
       uniformScaling: false
@@ -336,6 +343,8 @@ export class ImageComponent implements OnInit {
   // Sauvegarde des changements effectués
   sauvegarderEtiquettes(): void {
     console.log("Début de la sauvegarde des étiquettes");
+
+    getImage("nomImage");
 
     // On initialise une liste vide qui va contenir le JSON de chaque étiquette
     let listeEtiquettesJSON: EtiquetteJSON[] = [];

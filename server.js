@@ -26,3 +26,7 @@ app.get('/testJSON', function (req, res) {
     gender: 'male'
   });
 });
+
+app.get('/getImage', function (req, res) {
+  res.sendFile(path.resolve('image/' + req.query.nomImage));
+});
