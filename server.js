@@ -10,7 +10,7 @@ app.use(express.json())
 
 
 app.listen(port, () => {
-  console.log('My Demo App listening on ${port} port')
+  console.log('My Demo App listening on port '+ port)
 });
 
 //#region 
