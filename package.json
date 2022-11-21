@@ -36,6 +36,7 @@
     "@angular-devkit/build-angular": "^14.2.4",
     "@angular/cli": "~14.2.4",
     "@angular/compiler-cli": "^14.2.0",
+    "@types/axios": "^0.14.0",
     "@types/fabric": "^4.5.12",
     "@types/jasmine": "~4.0.0",
     "@types/node": "^18.11.2",

@@ -6,6 +6,7 @@ var fs = require('fs');
 
 app.use(express.static('dist/labellisation/'));
 app.use(express.static('image'));
+app.use(express.json())
 
 
 app.listen(port, () => {
@@ -40,6 +41,16 @@ app.get('/testJSON', function (req, res) {
   });
 });
 
-app.get('/getImage', function (req, res) {
-  res.sendFile(path.resolve('image/' + req.query.nomImage));
+app.post('/', function(req, res){
+  var dict = {
+    box : req.body.box,
+    class : req.body.class,
+    text : req.body.text
+  }
+  var dictstring = JSON.stringify(dict);
+
+  fs.writeFile("src/assets/jsons/" + req.body.filename+".json", dictstring, function(err, result) {
+    if(err) console.log('error', err);
+  });
+  res.send("it worked")
 });
