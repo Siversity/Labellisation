@@ -32,12 +32,8 @@
     })
   })
 
-  app.get('/testJSON', function (req, res) {
-    res.json({
-      number: 1,
-      name: 'John',
-      gender: 'male'
-    });
+  app.get('/getImage', function (req, res) {
+    res.sendFile(path.resolve('image/' + req.query.nomImage));
   });
 //#endregion
 
