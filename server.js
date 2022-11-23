@@ -4,13 +4,14 @@
   const port = 4300;
   const path = require('path');
   var fs = require('fs');
+  var cors = require('cors')
 
   app.use(express.static('dist/labellisation/'));
   app.use(express.static('image'));
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }));
   app.use(express.text())
-
+  app.use(cors())
 
   app.listen(port, () => {
     console.log('My Demo App listening on port '+ port)
@@ -22,12 +23,12 @@
     res.sendFile(path.resolve('dist/labellisation/index.html'));
   });
 
-  app.get('/imagesNameList', function (req, res) {
-    const json = { liste : [] };
+  app.get('/getListeNomImages', function (req, res) {
+    const json = { liste: [] };
     fs.readdir('image', function(error, files) {
       var toPut = [];
       files.forEach(function (file, index) {
-        toPut.push({"nom" : file})
+        toPut.push(file)
       })
       json.liste = toPut;
       res.json(json)

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { getListeNomImages } from 'src/api/getListeNomImages';
 
 
 @Component({
@@ -13,13 +14,7 @@ export class PagePrincipaleComponent implements OnInit {
   ///////////////
   // VARIABLES //
   ///////////////
-  listeImages: string[] = [
-    "cutecats1.jpg",
-    "cutecats2.jpg",
-    "cutecats3.jpg",
-    "cutecats4.jpg",
-    "cutecats5.jpg"
-  ]
+  listeImages: any = []
   
 
 
@@ -34,7 +29,10 @@ export class PagePrincipaleComponent implements OnInit {
   /////////////////////////
   //#region
   // A l'initialisation
-  ngOnInit(): void {
+  async ngOnInit() {
+
+    this.listeImages = await getListeNomImages();
+    console.log(this.listeImages);
   }
 
   ngOndestroy() {
