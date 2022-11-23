@@ -1,0 +1,11 @@
+[
+{
+    "box": [100, 100, 100, 100],
+    "text": "Hello world",
+    "class": "Test"
+  },
+{
+"box": [100, 100, 100, 100],
+    "text": "Etiquette 1",
+    "class": "Test"
+}]
