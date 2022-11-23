@@ -21,13 +21,13 @@
   });
 
   app.get('/imagesNameList', function (req, res) {
-    const json = { list : [] };
+    const json = { liste : [] };
     fs.readdir('image', function(error, files) {
       var toPut = [];
       files.forEach(function (file, index) {
-        toPut.push({"name" : file})
+        toPut.push({"nom" : file})
       })
-      json.list = toPut;
+      json.liste = toPut;
       res.json(json)
     })
   })
