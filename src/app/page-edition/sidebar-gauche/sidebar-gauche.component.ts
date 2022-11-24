@@ -111,4 +111,8 @@ export class SidebarGaucheComponent implements OnInit {
 
   }
 
+  retourPagePrincipale() {
+    this.router.navigate(['principale']);
+  }
+
 }
