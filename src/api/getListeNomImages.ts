@@ -8,9 +8,6 @@ export function getListeNomImages(): any {
         method: 'GET',
         url: url + "/getListeNomImages",
     }).then(response => {
-        console.log(response.data.liste)
-
-        let listeImages = response.data.liste;
-        return listeImages;
+        return response.data.liste;
     });
 }

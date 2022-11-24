@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { getListeNomImages } from 'src/api/getListeNomImages';
 
 @Component({
   selector: 'app-sidebar-gauche',
@@ -11,6 +13,9 @@ export class SidebarGaucheComponent implements OnInit {
   ///////////////
   // VARIABLES //
   ///////////////
+
+  // Nom image
+  @Input() nomImage: string = "";
 
   // Fonction d'appel d'ajout d'une étiquette
   //@ts-ignore
@@ -28,7 +33,7 @@ export class SidebarGaucheComponent implements OnInit {
   //////////////////
   // CONSTRUCTEUR //
   //////////////////
-  constructor() { }
+  constructor(private router: Router) { }
 
 
   /////////////////////////
@@ -60,5 +65,50 @@ export class SidebarGaucheComponent implements OnInit {
     this.sbgLancerEventCentrerCameraVersPageEdition();
   }
   //#endregion
+
+
+
+
+  async afficherImagePrecedente() {
+
+    let listeImages = await getListeNomImages();
+    let indiceImage = listeImages.indexOf(this.nomImage);
+    let newImage: string = "";
+
+    if (indiceImage == 0) {
+      newImage = listeImages[listeImages.length - 1];
+    }
+    else {
+      newImage = listeImages[indiceImage - 1];
+    }
+
+    this.router.navigate(['edition/' + newImage])
+      .then(() => {
+        window.location.reload();
+      })
+
+  }
+
+
+
+  async afficherImageSuivante() {
+
+    let listeImages = await getListeNomImages();
+    let indiceImage = listeImages.indexOf(this.nomImage);
+    let newImage: string = "";
+
+    if (indiceImage == listeImages.length - 1) {
+      newImage = listeImages[0];
+    }
+    else {
+      newImage = listeImages[indiceImage + 1];
+    }
+
+    this.router.navigate(['edition/' + newImage])
+      .then(() => {
+        window.location.reload();
+      })
+
+  }
 
 }

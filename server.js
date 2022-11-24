@@ -9,8 +9,6 @@
   app.use(express.static('dist/labellisation/'));
   app.use(express.static('image'));
   app.use(express.json())
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.text())
   app.use(cors())
 
   app.listen(port, () => {
@@ -41,15 +39,18 @@
 //#endregion
 
 //#region POST
-  app.post('/postJson', function(req, res){
-    
-    var cheminImage = path.parse(req.query.nomImage).name;
-    console.log(req.body);
-    // var dictstring = JSON.stringify([req.body]);
-    fs.writeFile("src/assets/jsons/" + cheminImage+".json", req.body, function(err, result) {
+  app.post('/', function(req, res){
+    var dict = {
+      box : req.body.box,
+      class : req.body.class,
+      text : req.body.text
+    }
+    var dictstring = JSON.stringify([dict]);
+
+    fs.writeFile("src/assets/jsons/" + req.body.filename + ".json", dictstring, function(err, result) {
       if(err) console.log('error', err);
     });
-    res.send("It worked !");
+    res.send("it worked")
   });
 //#endregion
 

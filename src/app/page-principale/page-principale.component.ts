@@ -30,9 +30,7 @@ export class PagePrincipaleComponent implements OnInit {
   //#region
   // A l'initialisation
   async ngOnInit() {
-
     this.listeImages = await getListeNomImages();
-    console.log(this.listeImages);
   }
 
   ngOndestroy() {
