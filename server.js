@@ -10,6 +10,8 @@
   app.use(express.static('image'));
   app.use(express.json())
   app.use(cors())
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.text())
 
   app.listen(port, () => {
     console.log('My Demo App listening on port '+ port)
@@ -38,7 +40,21 @@
   });
 
   app.get('/getJson', function (req, res) {
-    res.sendFile(path.resolve('json/' + req.query.nomImage));
+
+    var cheminImage = "json/" + path.parse(req.query.nomImage).name + ".json";
+
+    fs.exists(cheminImage, function (doesExist) {
+      if (doesExist) {
+        res.sendFile(path.resolve(cheminImage));
+      } else {
+        fs.writeFile(cheminImage, "[]", function(err, result) {
+          if(err) console.log('error', err);
+        });
+        res.sendFile(path.resolve(cheminImage));
+      }
+    });
+
+    ;
   });
 //#endregion
 
@@ -46,11 +62,9 @@
 app.post('/postJson', function(req, res){
 
   var cheminImage = path.parse(req.query.nomImage).name;
-  console.log(req.body);
-  console.log(req.query.nomImage)
 
   // var dictstring = JSON.stringify([req.body]);
-  fs.writeFile("json" + cheminImage+".json", req.body, function(err, result) {
+  fs.writeFile("json/" + cheminImage + ".json", req.body, function(err, result) {
     if(err) console.log('error', err);
   });
   res.send("It worked !");

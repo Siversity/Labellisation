@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { getImage } from 'src/api/getImage';
+import { getJson } from 'src/api/getJson';
 import { postJson } from 'src/api/postJson';
 import { Association } from 'src/Association';
 import { EtiquetteJSON } from 'src/Etiquette';
@@ -33,7 +34,7 @@ export class ImageComponent implements OnInit {
   // Données image
   @Input() nomImage: string = "";
   lienImage: any = "";
-  lienJSON: string = 'assets/jsons/cutecats2.json';
+  lienJSON: any = "/jsons/cutecats2.json";
 
 
   //////////////////
@@ -48,10 +49,11 @@ export class ImageComponent implements OnInit {
   /////////////////////////
   //#region
   // A l'initialisation du composant
-  ngOnInit() {
+  async ngOnInit() {
 
     // Lien de l'image
-    this.lienImage = "http://localhost:4300/getImage?nomImage=" + this.nomImage;
+    this.lienImage = await getImage(this.nomImage);
+    this.lienJSON = await getJson(this.nomImage);
 
     // Création d'un canvas vide
     this.canvas = new fabric.Canvas("canvas", {
@@ -224,9 +226,54 @@ export class ImageComponent implements OnInit {
 
   // Création des étiquettes déjà existantes
   chargerEtiquettes() {
+
+    /*
+    console.log(this.lienJSON);
+
+    // On affiche chaque étiquette
+    this.lienJSON.forEach((etiquetteJSON: any) => {
+
+      let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+
+      // Création de l'objet
+      let association: Association = new Association(
+        this.canvas,
+        etiquetteJSON.text,
+        etiquetteJSON.class,
+        etiquetteJSON.box[0] * ratio,
+        etiquetteJSON.box[1] * ratio,
+        etiquetteJSON.box[2] * ratio,
+        etiquetteJSON.box[3] * ratio,
+      )
+
+      // Obtention des variables
+      let rect: fabric.Rect = association.getRect();
+      this.listeEtiquettes.push(association);
+
+      // Ajouter les évènements d'affichage des infos
+      this.ajouterEvenementsEtiquettes(association);
+
+      // Ajouter les évènements d'hover à l'étiquette
+      rect.on("mouseover", (o) => {
+        this.curseurSurEtiquette = true;
+      })
+      rect.on("mouseout", (o) => {
+        this.curseurSurEtiquette = false;
+      })
+
+    })
+
+    // Actualiser la liste d'étiquettes dans sidebar Droite
+    this.evenementEnvoyerListeEtiquettes(this.listeEtiquettes);
+
+    */
+
+
+    
     // On récupère le JSON existant
     fetch(this.lienJSON).then((data: Response) => data.json())
       .then((listeEtiquettes: EtiquetteJSON[]) => {
+        console.log(listeEtiquettes)
         // On affiche chaque étiquette
         listeEtiquettes.forEach((etiquetteJSON: any) => {
 
@@ -266,6 +313,8 @@ export class ImageComponent implements OnInit {
       }).catch(function () {
         console.log("Impossible de charger les étiquettes");
       });
+
+      
   }
 
   // Fonction d'ajout des évènements d'affichage des infos
