@@ -36,21 +36,24 @@
   app.get('/getImage', function (req, res) {
     res.sendFile(path.resolve('image/' + req.query.nomImage));
   });
+
+  app.get('/getJson', function (req, res) {
+    res.sendFile(path.resolve('json/' + req.query.nomImage));
+  });
 //#endregion
 
 //#region POST
-  app.post('/', function(req, res){
-    var dict = {
-      box : req.body.box,
-      class : req.body.class,
-      text : req.body.text
-    }
-    var dictstring = JSON.stringify([dict]);
+app.post('/postJson', function(req, res){
 
-    fs.writeFile("src/assets/jsons/" + req.body.filename + ".json", dictstring, function(err, result) {
-      if(err) console.log('error', err);
-    });
-    res.send("it worked")
+  var cheminImage = path.parse(req.query.nomImage).name;
+  console.log(req.body);
+  console.log(req.query.nomImage)
+
+  // var dictstring = JSON.stringify([req.body]);
+  fs.writeFile("json" + cheminImage+".json", req.body, function(err, result) {
+    if(err) console.log('error', err);
   });
+  res.send("It worked !");
+});
 //#endregion
 

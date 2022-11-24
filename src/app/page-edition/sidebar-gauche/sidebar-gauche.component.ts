@@ -90,7 +90,6 @@ export class SidebarGaucheComponent implements OnInit {
   }
 
 
-
   async afficherImageSuivante() {
 
     let listeImages = await getListeNomImages();

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { getImage } from 'src/api/getImage';
+import { postJson } from 'src/api/postJson';
 import { Association } from 'src/Association';
 import { EtiquetteJSON } from 'src/Etiquette';
 
@@ -344,8 +345,6 @@ export class ImageComponent implements OnInit {
   sauvegarderEtiquettes(): void {
     console.log("Début de la sauvegarde des étiquettes");
 
-    getImage("nomImage");
-
     // On initialise une liste vide qui va contenir le JSON de chaque étiquette
     let listeEtiquettesJSON: EtiquetteJSON[] = [];
 
@@ -358,6 +357,8 @@ export class ImageComponent implements OnInit {
     })
 
     console.log(JSON.stringify(listeEtiquettesJSON));
+
+    postJson(JSON.stringify(listeEtiquettesJSON), this.nomImage);
   }
 
   // Fonction pour actualiser les étiquettes
