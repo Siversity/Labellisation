@@ -34,8 +34,8 @@ export class ImageComponent implements OnInit {
   // Données image
   @Input() nomImage: string = "";
   lienImage: any = "";
-  lienJSON: any = "/jsons/cutecats2.json";
-
+  //lienJSON: any = 'assets/jsons/cutecats2.json';
+  lienJSON: any = [];
 
   //////////////////
   // CONSTRUCTEUR //
@@ -72,15 +72,14 @@ export class ImageComponent implements OnInit {
 
     // Création du canvas et import de l'image
     this.importerImage();
-    this.chargerEtiquettes();
+
+
   }
 
   // Lorsque le composant est initialisé
   ngAfterContentInit() {
     // Ajout des fonctionnalités d'édition
-    this.ajouterEtiquette();
-    this.limiterEtiquettes();
-    this.zoomerImage();
+
   }
   //#endregion
 
@@ -227,9 +226,8 @@ export class ImageComponent implements OnInit {
   // Création des étiquettes déjà existantes
   chargerEtiquettes() {
 
-    /*
-    console.log(this.lienJSON);
 
+    console.log("LISTE", this.lienJSON)
     // On affiche chaque étiquette
     this.lienJSON.forEach((etiquetteJSON: any) => {
 
@@ -266,10 +264,8 @@ export class ImageComponent implements OnInit {
     // Actualiser la liste d'étiquettes dans sidebar Droite
     this.evenementEnvoyerListeEtiquettes(this.listeEtiquettes);
 
-    */
 
-
-    
+    /*
     // On récupère le JSON existant
     fetch(this.lienJSON).then((data: Response) => data.json())
       .then((listeEtiquettes: EtiquetteJSON[]) => {
@@ -313,8 +309,9 @@ export class ImageComponent implements OnInit {
       }).catch(function () {
         console.log("Impossible de charger les étiquettes");
       });
+      */
 
-      
+
   }
 
   // Fonction d'ajout des évènements d'affichage des infos
@@ -506,6 +503,7 @@ export class ImageComponent implements OnInit {
   //#region
   // Fonction d'import des images
   importerImage(): void {
+    console.log(this.nomImage)
     fabric.Image.fromURL(this.lienImage, (image: fabric.Image) => {
 
       // Propriétés de l'image
@@ -518,6 +516,14 @@ export class ImageComponent implements OnInit {
 
       // Affichage de l'image
       this.canvas.add(image);
+
+      // Ajout des étiquettes
+      this.chargerEtiquettes();
+
+      // Ajout des évènements d'interaction
+      this.ajouterEtiquette();
+      this.limiterEtiquettes();
+      this.zoomerImage();
     });
   }
 

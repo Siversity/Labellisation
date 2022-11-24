@@ -10,6 +10,9 @@ export function getJson(nomImage: string) {
         url: url + "/getJson?nomImage=" + nomImage,
     }).then(response => {
         console.log(response.data)
+        if (response.data.length == 0) {
+            return [] as EtiquetteJSON[]; 
+        }
        return response.data as EtiquetteJSON[]; 
     });
 }
