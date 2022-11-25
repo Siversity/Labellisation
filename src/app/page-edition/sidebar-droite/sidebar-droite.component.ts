@@ -79,7 +79,6 @@ export class SidebarDroiteComponent implements OnInit {
 
   stockerListeEtiquettes(associations: Association[]) {
     this.listAssociationActu = associations;
-    console.log(this.listAssociationActu)
   }
   //#endregion
 
@@ -118,8 +117,6 @@ export class SidebarDroiteComponent implements OnInit {
       class: this.classe,
       box: [this.coordX, this.coordY, this.tailleX, this.tailleY],
     };
-
-    console.log(this.tailleX)
 
     // Envoi à PageEdition
     this.sbdActualiserEtiquetteVersPageEdition(json, this.id);

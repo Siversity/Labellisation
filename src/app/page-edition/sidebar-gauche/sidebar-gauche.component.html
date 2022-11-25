@@ -1,32 +1,19 @@
 <!-- Zone d'affichage des boutons -->
 
-<head>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
-        viewBox="0 0 16 16">
-        <path fill-rule="evenodd"
-            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
-    </svg>
-    <link rel="sidebar-gauche.component.css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-
-<body>
 
     <div class="container">
         <div class="row row-cols-6">
             <div class="col"><button type="button" class="button btn-sm"
-                    (click)="retourPagePrincipale()">Retour</button><br><br></div>
+                    (click)="retourPagePrincipale()">Retour</button></div>
             <div class="col"><button type="button" (click)="eventBoutonAjouterEtiquette()" class="button btn-sm"><span
-                        class="text">Ajouter une étiquette</span></button><br><br></div>
+                        class="text">Ajouter une étiquette</span></button></div>
             <div class="col"><button type="button" (click)="eventBoutonSupprimerEtiquette()" class="button btn-sm"><span
-                        class="text">Supprimer une étiquette</span></button><br><br></div>
+                        class="text">Supprimer une étiquette</span></button></div>
             <div class="col"><button type="button" (click)="eventBoutonCentrerCamera()" class="button btn-sm"><span
-                        class="text">Recentrer</span></button><br><br></div>
+                        class="text">Recentrer</span></button></div>
             <div class="col"><button type="button" class="button btn-sm" (click)="afficherImagePrecedente()"><i
-                        class="bi bi-arrow-left"></i></button><br><br></div>
+                        class="bi bi-arrow-left"></i></button></div>
             <div class="col"><button type="button" class="button btn-sm" (click)="afficherImageSuivante()"><i
-                        class="bi bi-arrow-right"></i></button><br><br></div>
+                        class="bi bi-arrow-right"></i></button></div>
         </div>
     </div>
-
-</body>

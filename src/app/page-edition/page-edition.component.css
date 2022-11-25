@@ -7,3 +7,11 @@
     background: linear-gradient(to right, #f56a96, #ffa371);
 }
 
+#sidebarGauche {
+    height: 10%;
+}
+
+#editionCol {
+    padding-top: 10%;
+    height: 80%;
+}

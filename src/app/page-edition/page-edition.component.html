@@ -27,25 +27,20 @@
 
         <!-- On crée la colonne de la SidebarGauche -->
         <div class="col-2">
-            <app-sidebar-gauche 
-            [nomImage]="nomImage"
-            [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"
-            [sbgLancerEventSupprimerEtiquetteVersPageEdition]="pageEditionSupprimerEtiquetteVersImage"
-            [sbgLancerEventCentrerCameraVersPageEdition]="pageEditionCentrerCameraVersImage"></app-sidebar-gauche>
         </div>
 
         <!-- On crée la colonne de la zone d'affichage de l'Image -->
         
-        <div id="editionCol" class="col-7 d-flex align-items-center justify-content-center">
-            <div class="row row-cols-1">
-                <div class="col">
+        <div class="col-7 d-flex align-items-center justify-content-center">
+            <div class="row row-cols-1 w-100 h-100 p-0 m-0">
+                <div id="sidebarGauche" class="col border rounded d-flex align-items-center justify-content-center">
                     <app-sidebar-gauche 
                     [nomImage]="nomImage"
                     [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"
                     [sbgLancerEventSupprimerEtiquetteVersPageEdition]="pageEditionSupprimerEtiquetteVersImage"
                     [sbgLancerEventCentrerCameraVersPageEdition]="pageEditionCentrerCameraVersImage"></app-sidebar-gauche>
                 </div>
-                <div class="row">
+                <div id="editionCol" class="col d-flex justify-content-center p-0 m-0">
                     <app-image
                     [nomImage]="nomImage"
                     [imageEnvoyerInfoVersPageEdition]="pageEditionEnvoyerInfoVersSbd"

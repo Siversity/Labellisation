@@ -262,6 +262,13 @@ export class ImageComponent implements OnInit {
     let ratio: number = this.canvas.getObjects()[0].scaleX as number;
 
     // On ajoute l'événement de sélection de l'étiquette
+    association.getRect().on('modified', () => {
+      
+      this.limiterEtiquette(association)
+      console.log("modified")
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
+    })
+
     association.getRect().on('scaling', () => {
       association.modifierJSONFromRect(ratio);
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
@@ -310,25 +317,18 @@ export class ImageComponent implements OnInit {
     let ratio: number = this.canvas.getObjects()[0].scaleX as number;
 
     this.canvas.on('object:moving', (e: any) => {
-      limiter(e, this.listeEtiquettes);
-    });
-
-    this.canvas.on('object:scaling', (e: any) => {
-      this.canvas.on('mouse:up', (e: any) => {
-        var association: Association = this.listeEtiquettes.find((obj: Association) => {
-          return obj.rect = e.target;
-        }) as Association;
-        this.limiterEtiquette(association);
-        association.modifierJSONFromRect(ratio);
-        this.canvas.renderAll();
-      })
-    });
-    
-    function limiter(e: any, listeEtiquettes: Association[]) {
-      var obj = e.target;
-      var association: Association = listeEtiquettes.find((obj: Association) => {
+      var association: Association = this.listeEtiquettes.find((obj: Association) => {
         return obj.rect = e.target;
       }) as Association;
+      limiter(e);
+      association.modifierJSONFromRect(ratio);
+      this.canvas.renderAll();
+    });
+
+
+    function limiter(e: any) {
+
+      var obj = e.target;
 
       // if object is too big ignore
       if (obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
@@ -343,7 +343,6 @@ export class ImageComponent implements OnInit {
       }
       // bot-right corner
       if (obj.getBoundingRect().top + obj.getBoundingRect().height > obj.canvas.height || obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas.width) {
-        console.log("coord bot(right")
         obj.top = Math.min(obj.top, obj.canvas.height - obj.getBoundingRect().height + obj.top - obj.getBoundingRect().top);
         obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left);
       }
@@ -389,6 +388,7 @@ export class ImageComponent implements OnInit {
   }
 
   limiterEtiquette(association: any) {
+    console.log("limiterEtiquette")
     let image: fabric.Image = this.canvas.getObjects()[0] as fabric.Image;
     let imageHeight: number = image.height as number;
     let imageWidth: number = image.width as number;
@@ -396,22 +396,11 @@ export class ImageComponent implements OnInit {
     // Etiquette size : taille des étiquette
     // Etiquette coordonnées : coordonnées X,Y
 
-    // Etiquette Size dépasse à droite
-    if ((association.getJson().box[2] as number) >= (imageWidth)) {
-      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], imageWidth, association.getJson().box[3]])
-      association.modifierRectFromJSON(image.scaleX);
-      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
-    }
-    // Etiquette Size dépasse en bas
-    if ((association.getJson().box[3] as number) >= (imageHeight)) {
-      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], association.getJson().box[2], imageHeight])
-      association.modifierRectFromJSON(image.scaleX);
-      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
-    }
+    
 
     // Etiquette Coordonnées dépasse à droite
     if ((association.getJson().box[0] as number) + association.getJson().box[2] >= (imageWidth as number)) {
-      console.log("1er if")
+      console.log(3)
       association.setJsonBox([association.getJson().box[0], association.getJson().box[1], imageWidth - association.getJson().box[0], association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
@@ -419,7 +408,7 @@ export class ImageComponent implements OnInit {
 
     // Etiquette Coordonnées dépasse à gauche
     if (association.getJson().box[0] as number <= 0) {
-      console.log("2ème if")
+      console.log(4)
       association.setJsonBox([0, association.getJson().box[1], association.getJson().box[2] - Math.abs(association.getJson().box[0]), association.getJson().box[3]])
       association.modifierRectFromJSON(image.scaleX);
       this.ajouterEvenementsEtiquettes(association)
@@ -427,18 +416,39 @@ export class ImageComponent implements OnInit {
     }
     // Etiquette Coordonnées dépasse en bas
     if ((association.getJson().box[1] as number) + association.getJson().box[3] >= (imageHeight as number)) {
-      console.log("3ème if")
+      console.log(5)
       association.setJsonBox([association.getJson().box[0], association.getJson().box[1], association.getJson().box[2], imageHeight - association.getJson().box[1]])
       association.modifierRectFromJSON(image.scaleX);
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
     // Etiquette Coordonnées dépasse en haut
     if (association.getJson().box[1] as number <= 0) {
-
+      console.log(6)
       association.setJsonBox([association.getJson().box[0], 0, association.getJson().box[2], association.getJson().box[3] - Math.abs(association.getJson().box[1])])
       association.modifierRectFromJSON(image.scaleX);
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
+
+    // Etiquette Size dépasse à droite
+    if ((association.getJson().box[2] as number) >= (imageWidth)) {
+      console.log(1)
+      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], imageWidth, association.getJson().box[3]])
+      association.modifierRectFromJSON(image.scaleX);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
+    }
+    // Etiquette Size dépasse en bas
+    if ((association.getJson().box[3] as number) >= (imageHeight)) {
+      console.log(association.getJson().box[3], imageHeight)
+      console.log(2)
+      association.setJsonBox([association.getJson().box[0], association.getJson().box[1], association.getJson().box[2], imageHeight])
+      association.modifierRectFromJSON(image.scaleX);
+      this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
+    }
+
+    association.modifierJSONFromRect(this.canvas.getObjects()[0]);
+
+    console.log("limiterEtiquette fin")
+
   }
 
   selectionnerEtiquette(association: Association) {
@@ -455,7 +465,6 @@ export class ImageComponent implements OnInit {
   //#region
   // Fonction d'import des images
   importerImage(): void {
-    console.log(this.nomImage)
     fabric.Image.fromURL(this.lienImage, (image: fabric.Image) => {
 
       // Propriétés de l'image
@@ -509,7 +518,7 @@ export class ImageComponent implements OnInit {
   // Fonction pour afficher l'image de manière responsive
   tailleImage(image: fabric.Object): void {
     // Longeur image > hauteur image
-    if ((image.width as number) >= (image.height as number)) {
+    if ((image.width as number) > (image.height as number)) {
       this.canvas.setWidth(document.getElementById("editionCol")?.clientWidth as number);
       image.scaleToWidth(this.canvas.width as number);
       this.canvas.setHeight(image.getScaledHeight() as number)
@@ -522,7 +531,7 @@ export class ImageComponent implements OnInit {
     }
 
     // Hauteur image > longeur image
-    if ((image.height as number) > (image.width as number)) {
+    if ((image.height as number) >= (image.width as number)) {
       this.canvas.setHeight(document.getElementById("editionCol")?.clientHeight as number);
       image.scaleToHeight(this.canvas.height as number);
       this.canvas.setWidth(image.getScaledWidth() as number)
