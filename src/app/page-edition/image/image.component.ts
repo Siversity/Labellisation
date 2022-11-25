@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ErrorHandler, Input, OnInit } from '@angular/core';
 import { fabric } from 'fabric';
 import { getImage } from 'src/api/getImage';
 import { getJson } from 'src/api/getJson';
