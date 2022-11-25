@@ -66,14 +66,8 @@ export class ImageComponent implements OnInit {
     // Changement du type de curseur
     this.canvas.defaultCursor = "Handwriting";
 
-    this.canvas.on("mouse:dblclick", (o) => {
-      console.log(this.canvas.getObjects()[1].getScaledWidth())
-    })
-
     // Création du canvas et import de l'image
     this.importerImage();
-
-
   }
 
   // Lorsque le composant est initialisé
@@ -225,9 +219,6 @@ export class ImageComponent implements OnInit {
 
   // Création des étiquettes déjà existantes
   chargerEtiquettes() {
-
-
-    console.log("LISTE", this.lienJSON)
     // On affiche chaque étiquette
     this.lienJSON.forEach((etiquetteJSON: any) => {
 
@@ -263,55 +254,6 @@ export class ImageComponent implements OnInit {
 
     // Actualiser la liste d'étiquettes dans sidebar Droite
     this.evenementEnvoyerListeEtiquettes(this.listeEtiquettes);
-
-
-    /*
-    // On récupère le JSON existant
-    fetch(this.lienJSON).then((data: Response) => data.json())
-      .then((listeEtiquettes: EtiquetteJSON[]) => {
-        console.log(listeEtiquettes)
-        // On affiche chaque étiquette
-        listeEtiquettes.forEach((etiquetteJSON: any) => {
-
-          let ratio: number = this.canvas.getObjects()[0].scaleX as number;
-
-          // Création de l'objet
-          let association: Association = new Association(
-            this.canvas,
-            etiquetteJSON.text,
-            etiquetteJSON.class,
-            etiquetteJSON.box[0] * ratio,
-            etiquetteJSON.box[1] * ratio,
-            etiquetteJSON.box[2] * ratio,
-            etiquetteJSON.box[3] * ratio,
-          )
-
-          // Obtention des variables
-          let rect: fabric.Rect = association.getRect();
-          this.listeEtiquettes.push(association);
-
-          // Ajouter les évènements d'affichage des infos
-          this.ajouterEvenementsEtiquettes(association);
-
-          // Ajouter les évènements d'hover à l'étiquette
-          rect.on("mouseover", (o) => {
-            this.curseurSurEtiquette = true;
-          })
-          rect.on("mouseout", (o) => {
-            this.curseurSurEtiquette = false;
-          })
-
-        })
-
-        // Actualiser la liste d'étiquettes dans sidebar Droite
-        this.evenementEnvoyerListeEtiquettes(this.listeEtiquettes);
-
-      }).catch(function () {
-        console.log("Impossible de charger les étiquettes");
-      });
-      */
-
-
   }
 
   // Fonction d'ajout des évènements d'affichage des infos
@@ -328,7 +270,6 @@ export class ImageComponent implements OnInit {
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     })
     association.getRect().on('moving', () => {
-      console.log("Moving", (association.getRect().width as number * (association.getRect().scaleX as number)) / ratio);
       association.modifierJSONFromRect(ratio);
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     })
@@ -365,15 +306,36 @@ export class ImageComponent implements OnInit {
   }
 
   // Limite des étiquettes
-  limiterEtiquettes() {
+  limiterCanva() {
+    let ratio: number = this.canvas.getObjects()[0].scaleX as number;
+
     this.canvas.on('object:moving', (e: any) => {
+      limiter(e, this.listeEtiquettes);
+    });
+
+    this.canvas.on('object:scaling', (e: any) => {
+      this.canvas.on('mouse:up', (e: any) => {
+        var association: Association = this.listeEtiquettes.find((obj: Association) => {
+          return obj.rect = e.target;
+        }) as Association;
+        this.limiterEtiquette(association);
+        association.modifierJSONFromRect(ratio);
+        this.canvas.renderAll();
+      })
+    });
+    
+    function limiter(e: any, listeEtiquettes: Association[]) {
       var obj = e.target;
+      var association: Association = listeEtiquettes.find((obj: Association) => {
+        return obj.rect = e.target;
+      }) as Association;
 
       // if object is too big ignore
       if (obj.currentHeight > obj.canvas.height || obj.currentWidth > obj.canvas.width) {
         return;
       }
       obj.setCoords();
+
       // top-left  corner
       if (obj.getBoundingRect().top < 0 || obj.getBoundingRect().left < 0) {
         obj.top = Math.max(obj.top, obj.top - obj.getBoundingRect().top);
@@ -381,16 +343,15 @@ export class ImageComponent implements OnInit {
       }
       // bot-right corner
       if (obj.getBoundingRect().top + obj.getBoundingRect().height > obj.canvas.height || obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas.width) {
+        console.log("coord bot(right")
         obj.top = Math.min(obj.top, obj.canvas.height - obj.getBoundingRect().height + obj.top - obj.getBoundingRect().top);
         obj.left = Math.min(obj.left, obj.canvas.width - obj.getBoundingRect().width + obj.left - obj.getBoundingRect().left);
       }
-    });
+    }
   }
 
   // Sauvegarde des changements effectués
   sauvegarderEtiquettes(): void {
-    console.log("Début de la sauvegarde des étiquettes");
-
     // On initialise une liste vide qui va contenir le JSON de chaque étiquette
     let listeEtiquettesJSON: EtiquetteJSON[] = [];
 
@@ -402,16 +363,12 @@ export class ImageComponent implements OnInit {
       }
     })
 
-    console.log(JSON.stringify(listeEtiquettesJSON));
-
+    // Envoi du JSON au serveur
     postJson(JSON.stringify(listeEtiquettesJSON), this.nomImage);
   }
 
   // Fonction pour actualiser les étiquettes
   actualiserEtiquette(json: EtiquetteJSON, id: string) {
-
-    console.log("modified")
-
     // Si aucun objet n'est sélectionné, ne rien faire
     if (this.canvas.getActiveObjects().length == 0) {
       return;
@@ -425,10 +382,16 @@ export class ImageComponent implements OnInit {
     association.setJson(json);
     association.modifierRectFromJSON(image.scaleX as number);
 
+    this.limiterEtiquette(association);
 
+    // Render des étiquettes
+    this.canvas.renderAll();
+  }
+
+  limiterEtiquette(association: any) {
+    let image: fabric.Image = this.canvas.getObjects()[0] as fabric.Image;
     let imageHeight: number = image.height as number;
     let imageWidth: number = image.width as number;
-
 
     // Etiquette size : taille des étiquette
     // Etiquette coordonnées : coordonnées X,Y
@@ -471,25 +434,14 @@ export class ImageComponent implements OnInit {
     }
     // Etiquette Coordonnées dépasse en haut
     if (association.getJson().box[1] as number <= 0) {
-      console.log("4ème if")
+
       association.setJsonBox([association.getJson().box[0], 0, association.getJson().box[2], association.getJson().box[3] - Math.abs(association.getJson().box[1])])
       association.modifierRectFromJSON(image.scaleX);
       this.imageEnvoyerInfoVersPageEdition(association.getJson(), association.getId());
     }
-
-    /*
-    // Réinitialisation du scale des étiquettes
-    association.getRect().scaleX = 1;
-    association.getRect().scaleY = 1;
-    */
-
-    // Render des étiquettes
-    this.canvas.renderAll();
-
   }
 
   selectionnerEtiquette(association: Association) {
-    console.log(association.getRect())
     // this.canvas.discardActiveObject().renderAll();
     this.canvas.setActiveObject(association.getRect());
     this.canvas.renderAll()
@@ -522,7 +474,7 @@ export class ImageComponent implements OnInit {
 
       // Ajout des évènements d'interaction
       this.ajouterEtiquette();
-      this.limiterEtiquettes();
+      this.limiterCanva();
       this.zoomerImage();
     });
   }
@@ -540,17 +492,6 @@ export class ImageComponent implements OnInit {
       let json: EtiquetteJSON = association.getJson();
 
       if (etiquette.type != 'image') {
-
-        /*
-        // Origine
-        etiquette.top = 100 * ratio;
-        etiquette.left = 100 * ratio;
-
-        // Taille
-        etiquette.scaleToWidth(100 * ratio);
-        etiquette.scaleToHeight(100 * ratio);
-        */
-
         // Origine
         etiquette.top = (json.box[0] as number) * ratio;
         etiquette.left = (json.box[1] as number) * ratio;
@@ -558,23 +499,9 @@ export class ImageComponent implements OnInit {
         // Taille
         etiquette.scaleToHeight((json.box[2] as number) * ratio);
 
-
+        // Réinitialisation du scale des étiquette
         etiquette.scaleX = 1;
         etiquette.scaleY = 1;
-
-
-        //association.modifierRectFromJSON(ratio);
-
-
-        console.log("Resize", (etiquette.width as number * (etiquette.scaleX as number)) / ratio);
-
-
-        //console.log(association.getJson().box[2])
-
-
-
-        //etiquette.scaleToWidth((json.box[3] as number) * ratio);
-
       }
     })
   }
@@ -634,7 +561,6 @@ export class ImageComponent implements OnInit {
   // Recentrer la caméra
   recentrerImage() {
     this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-    console.log(this.canvas.getObjects()[1].getScaledWidth())
   }
   //#endregion
 

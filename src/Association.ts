@@ -158,24 +158,17 @@ export class Association {
         let sizeX: number = (this.rect.width as number * (this.rect.scaleX as number)) / ratio;
         let sizeY: number = (this.rect.height as number * (this.rect.scaleY as number)) / ratio;
 
-        console.log("Modifier", sizeX)
-
         this.setJsonBox([x, y, sizeX, sizeY]);
     }
     //#endregion
 
     modifierRectFromJSON(ratio: number) {
-        console.log("Modifier", (this.rect.width as number * (this.rect.scaleX as number)) / ratio);
-
         let left: number = this.json.box[0] as number * ratio;
         let top: number = this.json.box[1] as number * ratio;
         let width: number = (this.json.box[2] as number * ratio) / (this.rect.scaleX as number);
         let height: number = (this.json.box[3] as number * ratio) / (this.rect.scaleY as number);
 
-        console.log("Modifier Bis",  (width * (this.rect.scaleX as number)) / ratio)
-
         this.setRectCoordAndSize(left, top, width, height);
-
     }
 
     //#endregion
