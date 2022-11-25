@@ -8,6 +8,7 @@ import { PageEditionComponent } from './page-edition/page-edition.component';
 import { SidebarDroiteComponent } from './page-edition/sidebar-droite/sidebar-droite.component';
 import { SidebarGaucheComponent } from './page-edition/sidebar-gauche/sidebar-gauche.component';
 import { PagePrincipaleComponent } from './page-principale/page-principale.component';
+import { ListeImageComponent } from './page-edition/liste-image/liste-image.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { PagePrincipaleComponent } from './page-principale/page-principale.compo
     PageEditionComponent,
     SidebarGaucheComponent,
     SidebarDroiteComponent,
-    ImageComponent
+    ImageComponent,
+    ListeImageComponent
   ],
   imports: [
     BrowserModule,

@@ -10,23 +10,11 @@
 <div class="container-fluid text-center min-vh-100 min-vm-100">
 
     <!-- On crée une ligne -->
-
-    <!-- <div class="row">
-        <div class="col-2"></div>
-        <div class="col-7 d-flex align-items-center justify-content-center">
-            <app-sidebar-gauche 
-            [nomImage]="nomImage"
-            [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"
-            [sbgLancerEventSupprimerEtiquetteVersPageEdition]="pageEditionSupprimerEtiquetteVersImage"
-            [sbgLancerEventCentrerCameraVersPageEdition]="pageEditionCentrerCameraVersImage"></app-sidebar-gauche>
-        </div>
-        <div class="col-3"></div>
-
-    </div> -->
     <div class="row min-vh-100">
 
         <!-- On crée la colonne de la SidebarGauche -->
         <div class="col-2">
+            <app-liste-image></app-liste-image>
         </div>
 
         <!-- On crée la colonne de la zone d'affichage de l'Image -->
@@ -49,6 +37,15 @@
             </div>
             
         </div>
+
+        <!-- On crée la colonne de la zone d'affichage de l'Image -->
+        <!-- <div id="editionCol" class="col-7 d-flex align-items-center justify-content-center">
+            <app-image
+            [nomImage]="nomImage"
+            [imageEnvoyerInfoVersPageEdition]="pageEditionEnvoyerInfoVersSbd"
+            [imageEnvoyerListeEtiquettesVersPageEdition]="pageEditionEnvoyerListeEtiquettesVersSbd"></app-image>
+            
+        </div> -->
 
         <!-- On crée la colonne de la SidebarDroite-->
         <div class="col-3">
