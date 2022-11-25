@@ -1,9 +1,11 @@
 <!-- Racine -->
+<!-- 
 <header>
     <div class="header">
         <h4>Labellisation</h4>
     </div>
 </header>
+-->
 <!-- On crée une DIV ayant pour taille toute la taille de l'écran -->
 <div class="container-fluid text-center min-vh-100 min-vm-100">
 
@@ -12,26 +14,38 @@
 
         <!-- On crée la colonne de la SidebarGauche -->
         <div class="col-2">
-            <div class="row">
-                <app-sidebar-gauche 
-                [nomImage]="nomImage"
-                [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"
-                [sbgLancerEventSupprimerEtiquetteVersPageEdition]="pageEditionSupprimerEtiquetteVersImage"
-                [sbgLancerEventCentrerCameraVersPageEdition]="pageEditionCentrerCameraVersImage"></app-sidebar-gauche>
-            </div>
-            <div class="row">
-                <app-liste-image></app-liste-image>
-            </div>
+            <app-liste-image></app-liste-image>
         </div>
 
         <!-- On crée la colonne de la zone d'affichage de l'Image -->
+        
         <div id="editionCol" class="col-7 d-flex align-items-center justify-content-center">
+            <div class="row row-cols-1">
+                <div class="col">
+                    <app-sidebar-gauche 
+                    [nomImage]="nomImage"
+                    [sbgLancerEventAjoutEtiquetteVersPageEdition]="pageEditionAjouterEtiquetteVersImage"
+                    [sbgLancerEventSupprimerEtiquetteVersPageEdition]="pageEditionSupprimerEtiquetteVersImage"
+                    [sbgLancerEventCentrerCameraVersPageEdition]="pageEditionCentrerCameraVersImage"></app-sidebar-gauche>
+                </div>
+                <div class="row">
+                    <app-image
+                    [nomImage]="nomImage"
+                    [imageEnvoyerInfoVersPageEdition]="pageEditionEnvoyerInfoVersSbd"
+                    [imageEnvoyerListeEtiquettesVersPageEdition]="pageEditionEnvoyerListeEtiquettesVersSbd"></app-image>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- On crée la colonne de la zone d'affichage de l'Image -->
+        <!-- <div id="editionCol" class="col-7 d-flex align-items-center justify-content-center">
             <app-image
             [nomImage]="nomImage"
             [imageEnvoyerInfoVersPageEdition]="pageEditionEnvoyerInfoVersSbd"
             [imageEnvoyerListeEtiquettesVersPageEdition]="pageEditionEnvoyerListeEtiquettesVersSbd"></app-image>
             
-        </div>
+        </div> -->
 
         <!-- On crée la colonne de la SidebarDroite-->
         <div class="col-3">
