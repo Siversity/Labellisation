@@ -24,14 +24,23 @@ body{
 
 .container {
     padding-bottom: 2%;
+    height: 25%;
 }
 
 /* couleur texte*/
 .col-4 {
+  margin-top : 1%;
   color:#ffffff;
 }
 
+.col-8 {
+  width : 75%;
+  margin-left : -10%;
+}
 
+.form-select {
+  height: 100%;
+}
 
 /* CSS bouton */
 .button {
@@ -62,7 +71,7 @@ body{
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    margin-left: 70px;
+    margin-left: 25%;
   }
   
   .button:active {
