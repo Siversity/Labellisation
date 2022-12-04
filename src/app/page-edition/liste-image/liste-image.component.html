@@ -6,7 +6,7 @@
           The current button
         </button>
 
-        <a *ngFor="let image of listeImages" class="list-group-item list-group-item-action" [routerLink]="['/edition', image]" routerLinkActive="active" ariaCurrentWhenActive="page">{{image}}</a>
+        <a *ngFor="let image of listeImages" class="list-group-item list-group-item-action" [routerLink]="['/edition', image]" (click)="setPath()" routerLinkActive="active" ariaCurrentWhenActive="page">{{image}}</a>
       </div>
 
 </div>

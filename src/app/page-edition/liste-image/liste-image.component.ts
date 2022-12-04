@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { getListeNomImages } from 'src/api/getListeNomImages';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-liste-image',
@@ -9,8 +10,9 @@ import { getListeNomImages } from 'src/api/getListeNomImages';
 export class ListeImageComponent implements OnInit {
 
   listeImages: any = [];
+  path : string = "";
 
-  constructor() { }
+  constructor(private elementRef: ElementRef) { }
 
   /////////////////////////
   // FONCTIONS PRIMAIRES //
@@ -20,6 +22,22 @@ export class ListeImageComponent implements OnInit {
   async ngOnInit() {
     this.listeImages = await getListeNomImages();
   }
+
+  ngOndestroy() {
+    this.elementRef.nativeElement.remove();
+  }
+  //#endregion
+
+  //#region 
+  setPath() {
+    console.log("refresh de la page");
+    setTimeout(function(){
+      window.location.reload();
+    }, 10);
+    
+  }
+
+
   //#endregion
 
 }
