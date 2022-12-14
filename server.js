@@ -63,6 +63,8 @@ app.post('/postJson', function(req, res){
 
   var cheminImage = path.parse(req.query.nomImage).name;
 
+  console.log(req.body)
+
   // var dictstring = JSON.stringify([req.body]);
   fs.writeFile("json/" + cheminImage + ".json", req.body, function(err, result) {
     if(err) console.log('error', err);
