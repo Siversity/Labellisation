@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { getListeNomImages } from 'src/api/getListeNomImages';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-liste-image',
