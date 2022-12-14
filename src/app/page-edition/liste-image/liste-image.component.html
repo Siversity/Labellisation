@@ -3,7 +3,7 @@
 
     <div class="list-group">
         <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
-          The current button
+          Liste d'images :
         </button>
 
         <a *ngFor="let image of listeImages" class="list-group-item list-group-item-action" [routerLink]="['/edition', image]" (click)="setPath()" routerLinkActive="active" ariaCurrentWhenActive="page">{{image}}</a>
